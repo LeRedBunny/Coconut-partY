@@ -8,11 +8,12 @@ typedef struct {
 typedef struct {
 	int width, height;
 	char **map;
+	Vector *path;
 } Map;
 
 
 typedef struct {
-	Vector position;
+	int path_index;
 	int health;
 	int speed;
 } Crab;
