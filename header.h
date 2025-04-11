@@ -42,6 +42,9 @@ int move (Crab *crab, Map map);
 
 void kill (Crab *crab);
 
+Crab randomCrab (int round_number);
+Crab *randomCrabs (int n, int round_number);
+
 
 
 	// Monkeys
