@@ -1,3 +1,5 @@
+#include <math.h>
+
 typedef struct {
 	int x, y;
 } Vector;
@@ -20,6 +22,10 @@ Vector scale (Vector v, int scalar) {
 Vector substract (Vector u, Vector v) {
 	/* Returns u - v */
 	return vector(u.x - v.x, u.y - v.y);
+}
+
+float norm (Vector v) {
+	return sqrt(v.x * v.x + v.y * v.y);
 }
 
 Vector DIRECTIONS[4] = {vector(1, 0), vector(0, 1), vector(-1, 0), vector(0, -1)}
