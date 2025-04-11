@@ -9,6 +9,7 @@ typedef struct {
 	int width, height;
 	char **map;
 	Vector *path;
+	int path_length;
 } Map;
 
 
@@ -37,9 +38,9 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 
 	// Crabes
 
-Vector nextTile (Crab *crab, Map map);
+int move (Crab *crab, Map map);
 
-void move (Crab *crab, Map map);
+void kill (Crab *crab);
 
 
 
