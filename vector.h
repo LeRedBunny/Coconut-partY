@@ -17,4 +17,9 @@ Vector scale (Vector v, int scalar) {
 	return vector(scalar * v.x, scalar * v.y);
 }
 
+Vector substract (Vector u, Vector v) {
+	/* Returns u - v */
+	return add(u, scale(v, -1));
+}
+
 Vector DIRECTIONS[4] = {vector(1, 0), vector(0, 1), vector(-1, 0), vector(0, -1)}
