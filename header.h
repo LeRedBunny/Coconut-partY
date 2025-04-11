@@ -30,7 +30,7 @@ typedef struct {
 
 Map generate (int width, int height, int seed);
 
-void display (Map map, Crab *crabs, Monkey *monkeys);
+void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
 
 
 
@@ -44,7 +44,7 @@ void move (Crab *crab, Map map);
 
 	// Monkeys
 
-void shoot (Monkey monkey, Crab *crabs);
+void shoot (Monkey monkey, Crab *crabs, int n_crabs);
 
 
 
