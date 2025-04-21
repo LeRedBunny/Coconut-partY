@@ -7,8 +7,6 @@
 
 #define START_CRABS 3
 #define CRAB_MULTIPLIER 1.2
-#define AVG_CRAB_TIMER = 4
-#define TIMER_VARIANCE = 3
 
 
 void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
