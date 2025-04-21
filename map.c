@@ -51,7 +51,7 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 }
 
 
-Map generate (int width, int height, int seed) {
+Map generate (int width, int height, int seed, int direction) {
 	/* Creates a new random map with the given width and height, generated with the given seed */
 	
 	srand(seed);
