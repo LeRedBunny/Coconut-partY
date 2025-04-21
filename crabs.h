@@ -3,6 +3,13 @@
 #include"header.h"
 #include"vector.h"
 define SIZE 4
+
+
+int crabTimer () {
+	/* Returns a new value for the crab spawn timer */
+	return AVG_CRAB_TIMER + randint(-TIMER_VARIANCE, TIMER_VARIANCE);
+}
+	
 void kill (Crab *crab){
 	crab->path_index = -1;
 }  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
