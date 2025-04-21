@@ -36,7 +36,7 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 
 
 
-	// Crabes
+	// Crabs
 
 int move (Crab *crab, Map map);
 
@@ -50,6 +50,14 @@ Crab *randomCrabs (int n, int round_number);
 	// Monkeys
 
 void shoot (Monkey monkey, Crab *crabs, int n_crabs);
+
+
+	// Game
+
+void round (Map map, Monkey *monkeys, int n_monkeys, int round_number);
+
+int game (char *save); // save is a string containing the save file path, or NULL if new game
+
 
 
 
