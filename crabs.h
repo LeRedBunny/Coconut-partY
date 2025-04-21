@@ -2,10 +2,13 @@
 #include<stdlib.h>
 #include"header.h"
 #include"vector.h"
-define SIZE 4
+#define SIZE 4
 
-#define AVG_CRAB_TIMER = 4
-#define TIMER_VARIANCE = 3
+#define AVG_CRAB_TIMER 4
+#define TIMER_VARIANCE 3
+
+#define DEATH_INDEX -1
+#define BEFORE_SPAWN_INDEX -2
 
 int crabTimer () {
 	/* Returns a new value for the crab spawn timer */
@@ -13,7 +16,7 @@ int crabTimer () {
 }
 	
 void kill (Crab *crab){
-	crab->path_index = -1;
+	crab->path_index = DEATH_INDEX;
 }  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
 
 int move (Crab *crab, Map map){
@@ -28,7 +31,7 @@ int move (Crab *crab, Map map){
 
 int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	for(int i = 0; i < length_tab_crab; i++){
-		if(tab_crabs[i].path_index == -2){
+		if(tab_crabs[i].path_index == BEFORE_SPAWN_INDEX){
 			tab_crabs[i].path_index == 0;
 			return 1;
 		}

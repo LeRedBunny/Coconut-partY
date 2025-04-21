@@ -20,7 +20,9 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 	
 	// Main round
 	int crab_timer = crabTimer();
-	while (1) {
+	int playing = 1;
+	int crabs_to_spawn = 1;
+	while (playing) {
 		
 		display(map, crabs, n_crabs, monkeys, n_monkeys);
 		
@@ -38,14 +40,13 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 		}
 		
 		// Spawn in a new crab
-		crab_timer--;
+		crab_timer -= crabs_to_spawn;
 		if (!crab_timer) {
 			crab_timer = crabTimer();
-			spawnCrab(crabs, n_crabs);
+			crabs_to_spawn = spawnCrab(crabs, n_crabs);
 		}
 		
-		
-		
+		playing = !allCrabsDead(crabs);	
 	}
 	
 	// End of round
@@ -53,6 +54,27 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 }
 
 
+int game (char *save) {
+	
+	Map map;	
+	Monkey *monkeys;
+	int round_number, rounds, n_monkeys, health, bananas;
+	
+	
+	if (save == NULL) {
+		
+		// Generate, set health, place the first monkey
+		
+	} else {
+		load(save, &round_number, &map, monkeys, &n_monkeys, &health, &bananas); // Maybe don't make a load function and just write everything here ? idk
+	}
+	
+	while (round_number < rounds && health > 0) {
+		round_number++;
+		round(map, monkeys, n_monkeys, round_number, health);
+		// Buy and upgrade monkeys
+	}
+}
 
 
 

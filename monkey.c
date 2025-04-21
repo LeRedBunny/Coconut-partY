@@ -2,6 +2,8 @@
 #include "header.h"
 #include "vector.h"
 
+#define RANGE_UPGRADE 1;
+#define DAMAGE_UPGRADE 2;
 
 
 void kill(Crab *crab){//a enlever
@@ -29,8 +31,8 @@ Monkey newMonkey(int x, int y){
 
 void upMonkey(Monkey *monkey){
 	/*level up a monkey in parameter*/
-    monkey->range += 1;
-    monkey->damage += 2;
+    monkey->range += RANGE_UPGRADE;
+    monkey->damage += DAMAGE_UPGRADE;
 }
 
 void shoot (Monkey monkey, Crab *crabs, int n_crab, Map map){
