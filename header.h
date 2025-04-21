@@ -58,6 +58,7 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number);
 
 int game (char *save); // save is a string containing the save file path, or NULL if new game
 
+void load (char *save, int *round_number, Map *map, Monkey *monkeys); // Loads the save file
 
 
 
