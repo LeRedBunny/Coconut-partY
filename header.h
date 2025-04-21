@@ -64,7 +64,7 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number);
 
 int game (char *save); // save is a string containing the save file path, or NULL if new game
 
-void load (char *save, int *round_number, Map *map, Monkey *monkeys, int &n_monkeys, int &health); // Loads the save file
+void load (char *save, int *round_number, Map *map, Monkey *monkeys, int &n_monkeys, int &health, &bananas); // Loads the save file
 
 int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map
 
