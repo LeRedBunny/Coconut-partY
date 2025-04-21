@@ -4,6 +4,8 @@
 #include"vector.h"
 define SIZE 4
 
+#define AVG_CRAB_TIMER = 4
+#define TIMER_VARIANCE = 3
 
 int crabTimer () {
 	/* Returns a new value for the crab spawn timer */
