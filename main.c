@@ -1,20 +1,14 @@
 #include "header.h"
 #include <math.h>
 #include "random.h"
-
+#include "crab.h"
+#include "monkey.h"
 
 
 #define START_CRABS 3
 #define CRAB_MULTIPLIER 1.2
 #define AVG_CRAB_TIMER = 4
 #define TIMER_VARIANCE = 3
-
-
-
-int crabTimer () {
-	/* Returns a new value for the crab timer */
-	return AVG_CRAB_TIMER + randint(-TIMER_VARIANCE, TIMER_VARIANCE);
-}
 
 
 void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
