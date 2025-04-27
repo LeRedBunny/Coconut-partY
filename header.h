@@ -27,13 +27,41 @@ typedef struct {
 } Monkey;
 
 
+typedef struct {
+	int round_number, rounds;
+	Map map;
+	Monkey *monkeys;
+	int n_monkeys;
+	int health;
+	int bananas;
+} GameData;
+
+
+	// Vector
+
+Vector vector (int x, int y);
+
+Vector add (Vector u, Vector v);
+
+Vector scale (Vector v, int scalar);
+
+Vector subtract (Vector u, Vector v);
+
+float length (Vector v);
+
+float distance (Vector u, Vector v);
+
+
+
+
 	// Map
 
 
-Map generate (int width, int height, int seed);
+Map generate (int width, int height, int seed);				// <-
 
 void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
 
+int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map		<-
 
 
 	// Crabs
@@ -42,34 +70,46 @@ int move (Crab *crab, Map map);
 
 void kill (Crab *crab);
 
-Crab randomCrab (int round_number);
+Crab randomCrab (int round_number); // Creates a random crab			        <-
 
-Crab *randomCrabs (int n, int round_number);
+Crab *randomCrabs (int n, int round_number); // Creates an array of random crabs  	<-
 
-int isDead (Crab crab);
+int isDead (Crab crab);									<-
 
-int allDead (Crab *crabs);
+int allDead (Crab *crabs);								<-
 
 
 	// Monkeys
 
 void shoot (Monkey monkey, Crab *crabs, int n_crabs);
 
-void placeMonkey (Map map, Monkey *monkeys);
+void newMonkey (Map map, Monkey *monkeys);
+
+void upMonkey (Monkey *monkey);
 
 
 	// Game
 
-void round (Map map, Monkey *monkeys, int n_monkeys, int round_number);
+void round (GameData data);
 
-int game (char *save); // save is a string containing the save file path, or NULL if new game
+void manage (GameData data); // Phase of placing new monkeys and upgrading them				<-
 
-void load (char *save, int *round_number, Map *map, Monkey *monkeys, int &n_monkeys, int &health, &bananas); // Loads the save file
+int startGame (char *save) // save is a string containing the save file path, or NULL if new game	<-
 
-int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map
+int game (GameData data); // Should be given all the data needed to play
+
+void load (char *save_file, GameData *data);								// <-
+
+void save (char *save_name, GameData data);							        // <-
+
+int score (GameData data); // Gives the player a score based on the final state of the game
+
+
 
 
 	// Other
+
+int randint (int a, int b);
 
 int askInt (int a, int b); // Asks the player to input an integer in [a; b]
 

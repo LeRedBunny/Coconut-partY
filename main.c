@@ -3,17 +3,19 @@
 #include "random.h"
 #include "crab.h"
 #include "monkey.h"
-
+#include "map.h"
+#include "player_interaction.h"
 
 #define START_CRABS 3
 #define CRAB_MULTIPLIER 1.2
+#define MAX_HEIGHT 100
+#define MAX_WIDTH 100
 
-
-void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
-	/*  */
+void round (GameData data) {
+	/* Runs a single round/wave of crabs */
 	
 	// Create crabs
-	int n_crabs = START_CRABS * pow(CRAB_MULTIPLIER, round_number);
+	int n_crabs = START_CRABS * pow(CRAB_MULTIPLIER, data.round_number);
 	Crab *crabs = malloc(n_crabs * sizeof(Crab));
 	if (crabs == NULL) {exit(1); }
 	
@@ -24,7 +26,7 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 	int crabs_to_spawn = 1;
 	while (playing) {
 		
-		display(map, crabs, n_crabs, monkeys, n_monkeys);
+		display(data.map, crabs, n_crabs, data.monkeys, data.n_monkeys);
 		
 		// Move crabs
 		for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
@@ -34,9 +36,8 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 		}
 		
 		// Shoot crabs
-		Monkey monkey;
-		for (int i = 0; i < n_monkeys; i++) {
-			shoot(monkeys[i], crabs, n_crabs, map); 
+		for (int i = 0; i < data.n_monkeys; i++) {
+			shoot(data.monkeys[i], crabs, n_crabs, map); 
 		}
 		
 		// Spawn in a new crab
@@ -54,27 +55,51 @@ void round (Map map, Monkey *monkeys, int n_monkeys, int round_number) {
 }
 
 
-int game (char *save) {
+int startGame (char *save) {
+	/* if save is NULL creates a new game, else loads the data, and start the game */
 	
-	Map map;	
-	Monkey *monkeys;
-	int round_number, rounds, n_monkeys, health, bananas;
-	
+	GameData data;
 	
 	if (save == NULL) {
 		
+		int width = askInt(10, MAX_WIDTH);
+		int height = askInt(10, MAX_HEIGHT);
+		data.map = generate()
 		// Generate, set health, place the first monkey
 		
+		
+		
 	} else {
-		load(save, &round_number, &map, monkeys, &n_monkeys, &health, &bananas); // Maybe don't make a load function and just write everything here ? idk
+		load(save, &data);
 	}
 	
-	while (round_number < rounds && health > 0) {
-		round_number++;
-		round(map, monkeys, n_monkeys, round_number, health);
-		// Buy and upgrade monkeys
-	}
+	return game(data);
 }
+
+int game (GameData data) {
+	/**/
+	while (data.round_number < data.rounds && data.health > 0) {
+		data.round_number++;
+		round(data);
+		manage(data);
+	}
+	return score(data);
+}
+
+
+int score (GameData data) {
+	/* Gives a score based on the final state of the game */
+	int s = 0;
+	for (int i = 0; i < data.n_monkeys; i++) {
+		s += data.monkeys[i].damage - data.monkeys[i].range;
+	}
+	s += data.bananas;
+	s += data.health * 5;
+	return s;
+}
+
+
+
 
 
 

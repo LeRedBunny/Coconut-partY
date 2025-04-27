@@ -61,7 +61,11 @@ Map generate (int width, int height, int seed, int direction) {
 	map.height = height;
 	map.map = malloc(width * height);
 	
-	// FAIRE
+	for (int x = 0; x < width; x++) { 
+		for (int y = 0; y < height; y++) {
+			...
+		}
+	}
 	
 }
 
