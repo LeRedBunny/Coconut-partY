@@ -28,4 +28,8 @@ float length (Vector v) {
 	return sqrt(v.x * v.x + v.y * v.y);
 }
 
+float distance (Vector u, Vector v) {
+	return length(subtract(v, u));
+}
+
 Vector DIRECTIONS[4] = {vector(1, 0), vector(0, 1), vector(-1, 0), vector(0, -1)}
