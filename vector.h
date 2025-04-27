@@ -19,7 +19,7 @@ Vector scale (Vector v, int scalar) {
 	return vector(scalar * v.x, scalar * v.y);
 }
 
-Vector substract (Vector u, Vector v) {
+Vector subtract (Vector u, Vector v) {
 	/* Returns u - v */
 	return vector(u.x - v.x, u.y - v.y);
 }
