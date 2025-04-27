@@ -20,10 +20,10 @@ void kill(Crab *crab){//a enlever
 
 
 
-Monkey newMonkey(int x, int y){
+Monkey newMonkey(Vector position){
 	/*add a monkey based on a position*/
     Monkey monkey;
-    monkey.position = vector(x, y);
+    monkey.position = position;
     monkey.range = 1;
     monkey.damage = 2;
     return monkey;
