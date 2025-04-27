@@ -24,7 +24,7 @@ Vector substract (Vector u, Vector v) {
 	return vector(u.x - v.x, u.y - v.y);
 }
 
-float norm (Vector v) {
+float length (Vector v) {
 	return sqrt(v.x * v.x + v.y * v.y);
 }
 
