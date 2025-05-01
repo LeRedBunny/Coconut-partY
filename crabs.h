@@ -10,6 +10,8 @@
 #define DEATH_INDEX -1
 #define BEFORE_SPAWN_INDEX -2
 
+#define COEF_EVOLUTION 0.125
+
 int randint(int x, int y) {
     return x + rand() % (y - x + 1);
 }
@@ -42,6 +44,25 @@ int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	}
 	return 0;
 } //Pour le premier crabe du tableau des crabes qui a un indice de chemin égale à -2, on le place  sur le terrain. S'il y en a plus, la fonction retourne 0.
+
+Crab randomCrab (int round_number){
+    if (round_number <= 0){
+        round_number = 1;
+    }else if (round_number > 20){
+        round_number = 20;
+    }
+    
+    Crab crab;
+    crab.path_index = 0;
+    crab.health = (round_number * COEF_EVOLUTION) * randint(16,28);
+    if ((round_number * COEF_EVOLUTION) * randint(1,11) >10){
+        crab.speed =2;
+    }else{
+        crab.speed =1;
+    }
+    
+    return crab;
+}//En fonction du nombre de tour joué, crée un crab de caracteristique variable
 
 int main(){
 	Crab **tab_crabs[SIZE];
