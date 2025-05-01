@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include"header.h"
 #include"vector.h"
+#include "random.h"
 #define SIZE 4
 
 #define AVG_CRAB_TIMER 4
@@ -11,10 +12,6 @@
 #define BEFORE_SPAWN_INDEX -2
 
 #define COEF_EVOLUTION 0.125
-
-int randint(int x, int y) {
-    return x + rand() % (y - x + 1);
-}
 
 int crabTimer () {
 	/* Returns a new value for the crab spawn timer */
