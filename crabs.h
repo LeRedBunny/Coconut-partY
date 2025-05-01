@@ -61,6 +61,32 @@ Crab randomCrab (int round_number){
     return crab;
 }//En fonction du nombre de tour joué, crée un crab de caracteristique variable
 
+Crab *randomCrabs (int n, int round_number){
+    Crab* crabs = NULL;
+    crabs = malloc(sizeof(Crab) * n);
+    if (crabs == NULL){
+        printf("Allocation error: Crab *randomCrabs(int n, int round_number)");
+        exit(4110);//4110 for AllO-cation
+    }
+    for(int i = 0; i<n; i++){
+        crabs[i] = randomCrab(round_number);
+    }
+    return crabs;
+}//Crée n crabs aléatoirement, en fonction du tour actuel, dans une liste renvoyé
+
+int isDead (Crab crab){
+    return crab.health <= 0;
+}//return 1 si le crabe n'as plus de vie, 0 sinon
+
+int allDead (Crab *crabs, int nb_crab){
+    for (int i =0; i<nb_crab; i++){
+        if (!isDead(crabs[i])){
+            return 0;
+        }
+    }
+    return 1;
+}//return 1 si tout les crabes n'ont plus de vie, 0 si il en reste au moins 1
+
 int main(){
 	Crab **tab_crabs[SIZE];
 	MAP map;
