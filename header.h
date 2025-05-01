@@ -76,7 +76,7 @@ Crab *randomCrabs (int n, int round_number); // Creates an array of random crabs
 
 int isDead (Crab crab);
 
-int allDead (Crab *crabs);
+int allDead (Crab *crabs, int nb_crab);
 
 
 	// Monkeys
