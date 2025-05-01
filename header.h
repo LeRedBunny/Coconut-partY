@@ -70,13 +70,13 @@ int move (Crab *crab, Map map);
 
 void kill (Crab *crab);
 
-Crab randomCrab (int round_number); // Creates a random crab			        <-
+Crab randomCrab (int round_number); // Creates a random crab
 
-Crab *randomCrabs (int n, int round_number); // Creates an array of random crabs  	<-
+Crab *randomCrabs (int n, int round_number); // Creates an array of random crabs
 
-int isDead (Crab crab);									<-
+int isDead (Crab crab);
 
-int allDead (Crab *crabs);								<-
+int allDead (Crab *crabs);
 
 
 	// Monkeys
