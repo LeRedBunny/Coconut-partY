@@ -10,6 +10,10 @@
 #define DEATH_INDEX -1
 #define BEFORE_SPAWN_INDEX -2
 
+int randint(int x, int y) {
+    return x + rand() % (y - x + 1);
+}
+
 int crabTimer () {
 	/* Returns a new value for the crab spawn timer */
 	return AVG_CRAB_TIMER + randint(-TIMER_VARIANCE, TIMER_VARIANCE);
