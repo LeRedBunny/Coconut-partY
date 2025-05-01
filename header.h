@@ -94,7 +94,7 @@ void round (GameData data);
 
 void manage (GameData data); // Phase of placing new monkeys and upgrading them				<-
 
-int startGame (char *save) // save is a string containing the save file path, or NULL if new game	<-
+int startGame (char *save); // save is a string containing the save file path, or NULL if new game	<-
 
 int game (GameData data); // Should be given all the data needed to play
 
