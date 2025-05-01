@@ -11,7 +11,7 @@
 #define MAX_HEIGHT 100
 #define MAX_WIDTH 100
 
-void round (GameData data) {
+void gameRound (GameData data) {
 	/* Runs a single round/wave of crabs */
 	
 	// Create crabs
@@ -80,7 +80,7 @@ int game (GameData data) {
 	/**/
 	while (data.round_number < data.rounds && data.health > 0) {
 		data.round_number++;
-		round(data);
+		gameRound(data);
 		manage(data);
 	}
 	return score(data);
