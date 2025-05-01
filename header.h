@@ -90,7 +90,7 @@ void upMonkey (Monkey *monkey);
 
 	// Game
 
-void round (GameData data);
+void gameRound (GameData data);
 
 void manage (GameData data); // Phase of placing new monkeys and upgrading them				<-
 
