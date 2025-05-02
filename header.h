@@ -1,9 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "vector.h"
-#include "random.h"
-#include <time.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include "random.h"
+#include "vector.h"
 
 
 typedef struct {
