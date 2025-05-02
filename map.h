@@ -1,8 +1,10 @@
-#include "header.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include "vector.h"
-
+/*
+nécessite l'inclusion de :
+header.h
+stdlib.h
+stdio.h
+vector.h
+*/
 
 
 #define SIZE_OCEAN 40
