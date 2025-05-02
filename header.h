@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "vector.h"
 #include "random.h"
+#include <time.h>
+#include <math.h>
 
 
 typedef struct {
