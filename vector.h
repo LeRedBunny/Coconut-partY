@@ -1,8 +1,6 @@
 #include <math.h>
 
-typedef struct {
-	int x, y;
-} Vector;
+
 
 Vector vector (int x, int y) {
 	Vector v;
