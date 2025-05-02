@@ -23,9 +23,9 @@ void kill (Crab *crab){
 }  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
 
 int move (Crab *crab, Map map){
-	while(crab->health > 0 && crab->path_index > Map.path_length){
+	while(crab->health > 0 && crab->path_index > map.path_length){
 		crab->path_index += crab->speed;
-			if(crab->path_index >= Map.path_length){
+			if(crab->path_index >= map.path_length){
 				kill(crab);
 				return 1;
 			}
@@ -89,7 +89,7 @@ int allDead (Crab *crabs, int nb_crab){
 
 int main(){
 	Crab **tab_crabs[SIZE];
-	MAP map;
+	Map map;
 	map.path_length = 8;
 	for(int i = 0; i < 40; i++){
 		
