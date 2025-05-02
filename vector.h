@@ -1,4 +1,7 @@
-#include <math.h>
+/*
+necessite l'inclusion de:
+math.h
+*/
 
 
 
