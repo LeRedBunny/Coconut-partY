@@ -57,7 +57,7 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map generate (int width, int height, int seed);				// <-
+Map generate (int ray, int seed, Vector direction);
 
 void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
 
