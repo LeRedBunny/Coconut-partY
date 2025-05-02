@@ -1,6 +1,9 @@
-#include <stdio.h>
-#include "header.h"
-#include "vector.h"
+/*
+nécessite l'inclusion de:
+stdio.h
+header.h
+vector.h
+*/
 
 #define RANGE_UPGRADE 1;
 #define DAMAGE_UPGRADE 2;
