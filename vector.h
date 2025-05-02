@@ -32,4 +32,3 @@ float distance (Vector u, Vector v) {
 	return length(subtract(v, u));
 }
 
-Vector DIRECTIONS[4] = {vector(1, 0), vector(0, 1), vector(-1, 0), vector(0, -1)}
