@@ -1,4 +1,7 @@
-#include <stdio.h>
+/*
+nécessite l'inclusion de:
+stdio.h
+*/
 
 int askInt (int a, int b) {
 	/* Asks the player to input an integer in [a; b] */
