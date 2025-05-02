@@ -1,6 +1,10 @@
-#include <time.h>
-#include <stdlib.h>
-#include <math.h>
+
+/*
+nécessite l'inclusion de:
+time.h
+stdlib.h
+math.h
+*/
 
 
 int randint (int a, int b) {
