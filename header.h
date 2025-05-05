@@ -75,7 +75,7 @@ Map generate (int ray, int seed, Vector direction);
 
 void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
 
-int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map		<-
+int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map
 
 
 	// Crabs
