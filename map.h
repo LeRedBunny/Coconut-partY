@@ -245,6 +245,11 @@ Map generate (int ray, int seed, Vector direction) {
 	return map;
 }
 
+
+int roundNumber (Map map) {
+	return (map.width + map.height) / 15;
+}
+
 #endif
 
 
