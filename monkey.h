@@ -1,9 +1,12 @@
-/*
-nécessite l'inclusion de:
-stdio.h
-header.h
-vector.h
-*/
+#ifndef
+
+
+#include "header.h"
+#include <stdio.h>
+#include "vector.h"
+
+
+
 
 #define RANGE_UPGRADE 1;
 #define DAMAGE_UPGRADE 2;
@@ -140,3 +143,4 @@ int main(){
 	
 	return 0;
 }
+#endif

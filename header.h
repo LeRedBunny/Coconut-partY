@@ -1,10 +1,18 @@
+#ifndef
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+#include "crabs.h"
+#include "game.h"
+#include "map.h"
+#include "monkey.h"
+#include "player_interaction.h"
 #include "random.h"
 #include "vector.h"
+
 
 
 typedef struct {
@@ -121,5 +129,6 @@ int askInt (int a, int b); // Asks the player to input an integer in [a; b]
 
 int choice (char **options, int n); // Prints the options and asks the player to choose, returns the chosen index
 
+#endif
 
 

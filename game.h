@@ -1,3 +1,5 @@
+#ifndef
+
 #include "header.h"
 #include <math.h>
 #include "random.h"
@@ -5,6 +7,7 @@
 #include "monkey.h"
 #include "map.h"
 #include "player_interaction.h"
+
 
 #define START_CRABS 3
 #define CRAB_MULTIPLIER 1.2
@@ -101,6 +104,6 @@ int score (GameData data) {
 
 
 
-
+#endif
 
 

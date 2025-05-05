@@ -1,10 +1,14 @@
-/*
-nécessite l'inclusion de :
-header.h
-stdlib.h
-stdio.h
-vector.h
-*/
+#ifndef
+
+
+
+
+
+#include "header.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "vector.h"
+
 
 
 #define SIZE_OCEAN 40
@@ -241,7 +245,7 @@ Map generate (int ray, int seed, Vector direction) {
 	return map;
 }
 
-
+#endif
 
 
 

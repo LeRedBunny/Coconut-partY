@@ -1,7 +1,7 @@
-/*
-nécessite l'inclusion de:
-stdio.h
-*/
+#ifndef
+
+#include "header.h"
+#include <stdio.h>
 
 int askInt (int a, int b) {
 	/* Asks the player to input an integer in [a; b] */
@@ -30,3 +30,4 @@ int choice (char **options, int n) {
 	
 	return k - 1;
 }
+#endif

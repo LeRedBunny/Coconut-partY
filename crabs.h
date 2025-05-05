@@ -1,11 +1,13 @@
-/*
-nécessite l'inclusion de:
-stdio.h
-stdlib.h
-header.h
-vector.h
-random.h
-*/
+#ifndef
+
+
+#include "header.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "random.h"
+#include "vector.h"
+
+
 #define SIZE 4
 
 #define AVG_CRAB_TIMER 4
@@ -99,3 +101,5 @@ int main(){
 	}
 	
 }
+
+#endif

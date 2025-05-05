@@ -1,8 +1,8 @@
-/*
-necessite l'inclusion de:
-math.h
-*/
+#ifndef
 
+
+#include"header.h"
+#include<math.h>
 
 
 Vector vector (int x, int y) {
@@ -32,4 +32,4 @@ float length (Vector v) {
 float distance (Vector u, Vector v) {
 	return length(subtract(v, u));
 }
-
+#endif
