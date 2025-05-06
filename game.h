@@ -1,12 +1,16 @@
-#ifndef
+#ifndef GAME_H
+#define GAME_H
 
-#include "header.h"
+
 #include <math.h>
-#include "random.h"
-#include "crab.h"
+
+
+#include "crabs.h"
+#include "header.h"
 #include "monkey.h"
 #include "map.h"
 #include "player_interaction.h"
+#include "random.h"
 
 
 #define START_CRABS 3
