@@ -1,8 +1,13 @@
-#ifndef
+#ifndef VECTOR_H
+#define VECTOR_H
 
 
-#include"header.h"
 #include<math.h>
+
+
+
+#include "header.h"
+
 
 
 Vector vector (int x, int y) {
