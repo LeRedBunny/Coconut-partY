@@ -1,9 +1,14 @@
-#ifndef
+#ifndef MONKEY_H
+#define MONKEY_H
+
+
+#include <stdio.h>
+
 
 
 #include "header.h"
-#include <stdio.h>
 #include "vector.h"
+
 
 
 
