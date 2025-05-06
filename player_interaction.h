@@ -1,7 +1,12 @@
-#ifndef
+#ifndef PLAYER_INTERACTION_H
+#define PLAYER_INTERACTION_H
+
+
+#include <stdio.h>
+
+
 
 #include "header.h"
-#include <stdio.h>
 
 int askInt (int a, int b) {
 	/* Asks the player to input an integer in [a; b] */
