@@ -94,14 +94,17 @@ int allDead (Crab *crabs, int nb_crab){
     return 1;
 }//return 1 si tout les crabes n'ont plus de vie, 0 si il en reste au moins 1
 
-int main(){
-	Crab **tab_crabs[SIZE];
-	Map map;
-	map.path_length = 8;
-	for(int i = 0; i < 40; i++){
-		
-	}
+
+int checkKing (Crab *crabs, int n_crabs, int path_length) {
+	/* Checks if a crab got to the end, returns 1 if one did and kills it */
 	
+	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
+		if (crab->path_index + 1 == path_length) {
+			crab->path_index = DEATH_INDEX;
+			return 1;
+		}
+	}
+	return 0;
 }
 
 #endif

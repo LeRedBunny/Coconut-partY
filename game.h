@@ -18,8 +18,8 @@
 #define MAX_HEIGHT 100
 #define MAX_WIDTH 100
 
-void gameRound (GameData data) {
-	/* Runs a single round/wave of crabs */
+int gameRound (GameData data) {
+	/* Runs a single round/wave of crabs, returns 1 if player won and 0 if they lost */
 	
 	// Create crabs
 	int n_crabs = START_CRABS * pow(CRAB_MULTIPLIER, data.round_number);
@@ -28,10 +28,10 @@ void gameRound (GameData data) {
 	
 	
 	// Main round
+	int alive = 1;
 	int crab_timer = crabTimer();
-	int playing = 1;
 	int crabs_to_spawn = 1;
-	while (playing) {
+	while (!allCrabsDead(crabs) && alive) {
 		
 		display(data.map, crabs, n_crabs, data.monkeys, data.n_monkeys);
 		
@@ -54,12 +54,52 @@ void gameRound (GameData data) {
 			crabs_to_spawn = spawnCrab(crabs, n_crabs);
 		}
 		
-		playing = !allCrabsDead(crabs);	
+		data.health -= checkKing(crabs, n_crabs, data.map.path_length);
+		if (!data.health) {
+			alive = 0;
+		}
 	}
 	
 	// End of round
 	free(crabs);
+	
+	return alive;
 }
+
+
+
+void displayGame (GameData data) {
+	printf("Vie : %d\nBananes : %d", data.health, data.bananas);
+	display(data.map);
+}
+
+
+void manage (GameData data) {
+	/*  */
+	int quit = 0;
+	int option;
+	
+	char options[3] =  {"Acheter",
+			    "Améliorer",
+			    "Passer"
+			    }
+	
+	while (!quit) {
+		printf("Voulez-vous acheter des singes, améliorer ou passer à la manche suivante ?");
+		option = choice(options, 3); 
+		switch (option) {
+		
+			case 1:
+				...
+			case 2:
+				...
+			case 3:
+				quit = 1;
+				break;
+		}
+	}
+}
+
 
 
 int startGame (char *save) {
@@ -85,16 +125,22 @@ int startGame (char *save) {
 
 int game (GameData data) {
 	/**/
-	while (data.round_number < data.rounds && data.health > 0) {
+	int alive = 1;
+	while (data.round_number < data.rounds && alive) {
+		
 		data.round_number++;
-		gameRound(data);
+		printf("Manche %d/%d !", data.round_number, data.rounds);
+		
 		manage(data);
+		alive = gameRound(data);
+		
+		printf("Fin de la manche !");
 	}
-	return score(data);
+	return score(data, alive);
 }
 
 
-int score (GameData data) {
+int score (GameData data, int alive) {
 	/* Gives a score based on the final state of the game */
 	int s = 0;
 	for (int i = 0; i < data.n_monkeys; i++) {
@@ -102,6 +148,7 @@ int score (GameData data) {
 	}
 	s += data.bananas;
 	s += data.health * 5;
+	s += s * alive;
 	return s;
 }
 

@@ -86,6 +86,7 @@ int isDead (Crab crab);
 
 int allDead (Crab *crabs, int nb_crab);
 
+int checkKing (Crab *crabs, int n_crabs, int path_length);
 
 	// Monkeys
 
@@ -98,7 +99,9 @@ void upMonkey (Monkey *monkey);
 
 	// Game
 
-void gameRound (GameData data);
+void displayGame (GameData data); // Displays the map, health and bananas of the player
+
+int gameRound (GameData data); // Returns 1 if player won the round, 0 if the player lost
 
 void manage (GameData data); // Phase of placing new monkeys and upgrading them				<-
 
@@ -110,7 +113,7 @@ void load (char *save_file, GameData *data);								// <-
 
 void save (char *save_name, GameData data);							        // <-
 
-int score (GameData data); // Gives the player a score based on the final state of the game
+int score (GameData data, int alive); // Gives the player a score based on the final state of the game
 
 
 
