@@ -14,6 +14,7 @@ typedef struct {
 } Vector;
 
 typedef struct {
+	int seed;
 	int width, height;
 	char **map;
 	Vector *path;
@@ -65,9 +66,15 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map generate (int ray, int seed, Vector direction);
+Map mapInit(int width, int height, Vector direction, int seed);
 
-void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
+void mapMakeIsland (Map* map, int seed);
+
+Vector mapPositionAway(Map map, Vector direction);
+
+void mapMakePath(Map* map, int seed);
+
+void display (Map map);
 
 int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map
 
