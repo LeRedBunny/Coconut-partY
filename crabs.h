@@ -1,12 +1,14 @@
-#ifndef
+#ifndef CRABS_H
+#define CRABS_H
+
+
+#include <stdio.h>
+#include <stdlib.h>
 
 
 #include "header.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "random.h"
 #include "vector.h"
-
 
 #define SIZE 4
 
