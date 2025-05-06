@@ -1,9 +1,14 @@
-#ifndef
+#ifndef RANDOM_H
+#define RANDOM_H
 
-#include"header.h"
-#include"time.h"
+
 #include<stdlib.h>
 #include<math.h>
+
+
+
+#include "header.h"
+#include"time.h"
 
 
 
