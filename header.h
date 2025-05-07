@@ -97,9 +97,9 @@ int checkKing (Crab *crabs, int n_crabs, int path_length);
 
 	// Monkeys
 
-void shoot (Monkey monkey, Crab *crabs, int n_crabs);
+void shoot (Monkey monkey, Crab *crabs, int n_crab, Map map);
 
-void newMonkey (Map map, Monkey *monkeys);
+Monkey newMonkey (Vector position);
 
 void upMonkey (Monkey *monkey);
 
