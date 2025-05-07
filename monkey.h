@@ -5,8 +5,9 @@
 #include <stdio.h>
 
 
-
+#include "crabs.h"
 #include "header.h"
+#include "map.h"
 #include "vector.h"
 
 
@@ -15,13 +16,6 @@
 
 #define RANGE_UPGRADE 1;
 #define DAMAGE_UPGRADE 2;
-
-
-void kill(Crab *crab){//a enlever
-	printf("le crabe en position index %d à été tué\n\n", crab->path_index);
-}
-
-
 
 
 
