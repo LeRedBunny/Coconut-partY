@@ -97,11 +97,13 @@ int checkKing (Crab *crabs, int n_crabs, int path_length);
 
 	// Monkeys
 
-void shoot (Monkey monkey, Crab *crabs, int n_crab, Map map);
+int shoot (Monkey monkey, Crab *crabs, int n_crab, Map map);  	//à changer pour que ça renvoie un bool indiquant si le crabe est tué
 
 Monkey newMonkey (Vector position);
 
 void upMonkey (Monkey *monkey);
+
+Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys); 
 
 
 	// Game
@@ -110,7 +112,7 @@ void displayGame (GameData data); // Displays the map, health and bananas of the
 
 int gameRound (GameData data); // Returns 1 if player won the round, 0 if the player lost
 
-void manage (GameData data); // Phase of placing new monkeys and upgrading them				<-
+void manage (GameData *data); // Phase of placing new monkeys and upgrading them
 
 int startGame (char *save); // save is a string containing the save file path, or NULL if new game	<-
 
