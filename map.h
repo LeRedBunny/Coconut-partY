@@ -85,8 +85,13 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 				printf("  ");
 				//printf("\U0001f333 ");
 			}
-			if(screen[y][x] == 'o') {
+			if(screen[y][x] == 'c') {
 				printf("\e[48;2;200;0;0m");
+				printf("  ");
+				//printf("\U0001f333 ");
+			}
+			if(screen[y][x] == 'm') {
+				printf("\e[48;2;34;50;50m");
 				printf("  ");
 				//printf("\U0001f333 ");
 			}
