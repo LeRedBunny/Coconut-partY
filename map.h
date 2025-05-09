@@ -237,6 +237,8 @@ int isBigger(int main, int second){
 int pathByBreadthFirst(int** digital_map, Vector digit_map_max, Vector shift, Map* map, Vector* to_visit, int* nb_visited, int* total_to_visit, int distance){
     Vector position = to_visit[(*nb_visited)];
     (*nb_visited)++;
+    
+    
     if (map->path[1].x == position.x && map->path[1].y == position.y){
         map->path_length = digital_map[position.y-shift.y][position.x-shift.x];
         map->path = realloc(map->path, sizeof(Vector) * (map->path_length));
@@ -284,10 +286,11 @@ int pathByBreadthFirst(int** digital_map, Vector digit_map_max, Vector shift, Ma
 
 
 int placePath(int** digital_map, Map* map, Vector digit_map_max, Vector shift, Vector end){
+
     Vector position = end;
     position = subtract(position, shift);
     int val = digital_map[position.y][position.x]-1;
-    while (val != 0){
+    while (0 < val){
         map->path[val] = add(position, shift);
         if(0<position.x-1){
             if (digital_map[position.y][position.x-1] == val){
@@ -329,8 +332,6 @@ void mapMakePath(Map* map){
 	//vérifie les donnée récuppérer
 	testAlloc(map->path, "mapMakerPath(), map->path");
 
-
-
 	//initialise les variables utiles
 	int digital_width = map->width+(2*(map->height/map->width))+4;
 	if (digital_width>MAP_SIZE_X_MAX){
@@ -340,13 +341,14 @@ void mapMakePath(Map* map){
 	if (digital_height>MAP_SIZE_Y_MAX){
     	digital_height=MAP_SIZE_Y_MAX;
 	}
-	
+
 	int** digital_map = malloc(sizeof(int*) * digital_height);
 	testAlloc(digital_map, "mapMakerPath(), digital_map");
 	for (int y=0; y<digital_height; y++){
     	digital_map[y] = calloc(digital_width, sizeof(int));
     	testAlloc(digital_map[y], "mapMakePath(), digital_map[y]");
 	}
+
 	
 	int shift_x = ((MAP_SIZE_X_MAX-digital_width)/2);
 	int shift_y = ((MAP_SIZE_Y_MAX-digital_height)/2);
@@ -371,7 +373,7 @@ void mapMakePath(Map* map){
     Vector* to_visit = malloc(sizeof(Vector) * digital_width * digital_height);
     testAlloc(to_visit, "mapMakePath(), to_visit");
 
-    
+
     
     //crée un acces, pour l'arriver et la fin, vers la parti boisser de l'ile
     for (int i = 0; i<2; i++){
@@ -409,7 +411,7 @@ void mapMakePath(Map* map){
         digital_map[position.y-shift_y][position.x-shift_x] = i-2;
     }
 
-	
+
 	//parcours la map pour enregistrer les arbres suprimable et définir la map digital_map
 	cell_val = 1;
 	for (int y = 0 ; y<digital_height; y++){
@@ -483,7 +485,7 @@ void mapMakePath(Map* map){
         map->map[tree.y][tree.x] = 't';
     }
     
-    	
+
     //parcours en largeur pour trouver la valeur -2 qui est la valeur d'arriver
     to_visit[0] = map->path[0];
     digital_map[map->path[0].y - shift_y][map->path[0].x - shift_x] = 1;
@@ -492,17 +494,24 @@ void mapMakePath(Map* map){
     
     Vector end = map->path[1];
     pathByBreadthFirst(digital_map, vector(digital_width, digital_height), vector(shift_x, shift_y), map, to_visit, &nb_visited, &total_to_visit, 2);
-	
 	//rebrouse chemin pour placer les casses du chemin
 	placePath(digital_map, map, vector(digital_width, digital_height), vector(shift_x, shift_y), end);
-	
     for (int y=0; y<digital_height; y++){
     	free(digital_map[y]);
 	}
 	free(digital_map);
     free(removable_tree);
     free(to_visit);
+
 }
+
+
+
+
+
+
+
+
 
 Map mapInit(int width, int height, Vector direction, int seed) {
 	/* Creates a new random map with the given width and height, generated with the given seed */
@@ -553,6 +562,7 @@ Map mapInit(int width, int height, Vector direction, int seed) {
 	map.path[1] = mapPositionAway(map, subtract(vector(0,0), direction));
 	mapMakePath(&map);//cette fonction va changer la taille de map.path_length et va changer map.path pour un tableau plus grand contenant le chemin
 
+
 	
 	srand(time(NULL));
 	return map;
@@ -571,7 +581,7 @@ void mapReset(Map* map){
 }
 
 int roundNumber (Map map) {
-	return (map.width + map.height) / 15;//n'est ce pas trop petit? la taille minimum est de 10|10 donc 20/15 = 1 (en int) ca risque d'etre trop peut 
+	return (map.width + map.height) / 10;//n'est ce pas trop petit? la taille minimum est de 10|10 donc 20/15 = 1 (en int) ca risque d'etre trop peut 
 }
 
 char getTile (Map map, Vector position) {
