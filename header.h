@@ -110,7 +110,7 @@ Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys);
 
 void displayGame (GameData data); // Displays the map, health and bananas of the player
 
-int gameRound (GameData data); // Returns 1 if player won the round, 0 if the player lost
+int gameRound (GameData *data); // Returns 1 if player won the round, 0 if the player lost
 
 void manage (GameData *data); // Phase of placing new monkeys and upgrading them
 
