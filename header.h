@@ -72,7 +72,7 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map mapInit(int width, int height, Vector direction, time_t seed);
+Map mapInit(int width, int height, Vector direction, int seed);
 
 void mapMakeIsland (Map* map);
 
