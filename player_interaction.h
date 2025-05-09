@@ -42,4 +42,10 @@ int choice (char **options, int n) {
 	
 	return k - 1;
 }
+
+int binaryChoice () {
+	/* Lets the player choose between yes and no */
+	char *yn = {"Oui", "Non"};
+	return choice(yn, 2);
+}
 #endif

@@ -46,6 +46,11 @@ typedef struct {
 	int bananas;
 } GameData;
 
+typedef struct {
+	char *name;
+	GameData data;
+} Save;
+
 
 	// Vector
 
