@@ -67,7 +67,7 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map mapInit(int width, int height, Vector direction, int seed);
+Map mapInit(int width, int height, Vector direction, time_t seed);
 
 void mapMakeIsland (Map* map);
 
@@ -120,12 +120,18 @@ int startGame (char *save); // save is a string containing the save file path, o
 
 int game (GameData data); // Should be given all the data needed to play
 
+
+int score (GameData data, int alive); // Gives the player a score based on the final state of the game
+
+
+
+	// Save
+
 void load (char *save_file, GameData *data);								// <-
 
 void save (char *save_name, GameData data);							        // <-
 
-int score (GameData data, int alive); // Gives the player a score based on the final state of the game
-
+void listSaves (char *path);										// <-
 
 
 
