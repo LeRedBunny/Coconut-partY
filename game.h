@@ -78,22 +78,23 @@ void displayGame (GameData data) {
 }
 
 
-void manage (GameData *data) {
-	/*  */
+int manage (GameData *data) {
+	/* Returns 1 if player quits */
 	int quit = 0;
 	int option;
 	
 	char *options[3] =  {"Acheter",
-			    		 "Améliorer",
-			    		 "Passer"
-			    		 };
+			     "Améliorer",
+			     "Passer",
+			     "Sauvegarder et quitter"
+			     };
 	
 	while (!quit) {
 		printf("Voulez-vous acheter des singes, améliorer ou passer à la manche suivante ?");
 		option = choice(options, 3); 
 		switch (option) {
 		
-			case 1:
+			case 1 :
 				if (data->bananas >= MONKEY_PRICE) {
 					data->bananas -= MONKEY_PRICE;
 					Vector position = askPosition(data->map.height, data->map.width);
@@ -104,7 +105,7 @@ void manage (GameData *data) {
 				}
 				break;
 			
-			case 2:
+			case 2 :
 				if (data->bananas >= MONKEY_UPGRADE_PRICE) {
 					data->bananas -= MONKEY_UPGRADE_PRICE;
 					Monkey *monkey;
@@ -117,50 +118,38 @@ void manage (GameData *data) {
 				}
 				break;
 			
-			case 3:
+			case 3 :
 				quit = 1;
 				break;
+			
+			case 4 :
+			
 		}
 	}
 }
 
 
-
-int startGame (char *save) {
-	/* if save is NULL creates a new game, else loads the data, and start the game */
-	
-	GameData data;
-	
-	if (save == NULL) {
-		
-		int width = askInt(10, MAX_WIDTH);
-		int height = askInt(10, MAX_HEIGHT);
-		//data.map = generate();
-		// Generate, set health, place the first monkey
-		
-		
-		
-	} else {
-		//load(save, &data);
-	}
-	
-	return game(data);
-}
-
 int game (GameData data) {
-	/**/
+	/* Returns 0 if the player quit */
 	int alive = 1;
-	while (data.round_number < data.rounds && alive) {
+	int quit = 0;
+	while (data.round_number < data.rounds && alive && !quit) {
 		
 		data.round_number++;
 		printf("Manche %d/%d !", data.round_number, data.rounds);
 		
-		manage(&data);
-		alive = gameRound(&data);
-		
-		printf("Fin de la manche !");
+		quit = manage(&data);
+		if (!quit) {
+			alive = gameRound(&data);
+		}
 	}
-	return score(data, alive);
+	
+	if (quit) {
+		return score(data, alive);
+	} else {
+		save(data);
+		return 0;
+	}
 }
 
 
