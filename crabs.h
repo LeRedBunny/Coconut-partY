@@ -31,13 +31,14 @@ void kill (Crab *crab){
 }  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
 
 int move (Crab *crab, Map map){
-	while(crab->health > 0 && crab->path_index > map.path_length){
+	if(crab->health > 0){
 		crab->path_index += crab->speed;
 			if(crab->path_index >= map.path_length){
 				kill(crab);
 				return 1;
 			}
 	}
+	return 0;
 } //Si le crabe est en vie, et qu'il n'a pas atteint la fin du chemin, il avance de n cases selon sa vitesse. S'il atteint la fin de la map, il meurt et fait perdre 1 point de vie au joueur.
 
 int spawnCrab(Crab *tab_crabs, int length_tab_crab){
