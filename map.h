@@ -574,4 +574,8 @@ int roundNumber (Map map) {
 	return (map.width + map.height) / 15;//n'est ce pas trop petit? la taille minimum est de 10|10 donc 20/15 = 1 (en int) ca risque d'etre trop peut 
 }
 
+char getTile (Map map, Vector position) {
+	return map.map[position.y][position.x];
+}
+
 #endif
