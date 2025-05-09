@@ -1,3 +1,4 @@
+
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -68,13 +69,13 @@ float distance (Vector u, Vector v);
 
 Map mapInit(int width, int height, Vector direction, int seed);
 
-void mapMakeIsland (Map* map, int seed);
+void mapMakeIsland (Map* map);
 
 Vector mapPositionAway(Map map, Vector direction);
 
-void mapMakePath(Map* map, int seed);
+void mapMakePath(Map* map);
 
-void display (Map map);
+void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys);
 
 int roundNumber (Map map); // Calculates the number of rounds to play to win on the given map
 
@@ -136,5 +137,3 @@ int askInt (int a, int b); // Asks the player to input an integer in [a; b]
 int choice (char **options, int n); // Prints the options and asks the player to choose, returns the chosen index
 
 #endif
-
-

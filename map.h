@@ -11,6 +11,7 @@
 #include "header.h"
 #include "vector.h"
 #include "random.h"
+#include "test.h"
 
 
 
@@ -21,21 +22,15 @@
 #define DIR_RIGHT vector(-1, 0)
 
 
-//void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys) {
-void display (Map map) {
+void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys) {
+    
 	/* Displays the current state of the game */
 	
 	char **screen = malloc(sizeof(char*) * MAP_SIZE_Y_MAX);
-	if (screen == NULL) {
-		printf("Allocation error: void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)\nscreen");
-        	exit(4110);//4110 for AllO-cation
-    	}
+	testAlloc(screen, "display(), screen");
 	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
 		screen[y] = malloc(sizeof(char) * MAP_SIZE_X_MAX);
-		if (screen[y] == NULL) {
-    	    		printf("Allocation error: void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)\nscreen[y]");
-            		exit(4110);//4110 for AllO-cation
-        	}
+		testAlloc(screen[y], "display(), screen[y]");
 	}
 	
 	
@@ -52,22 +47,25 @@ void display (Map map) {
 		screen[p.y][p.x] = 'p';
 	}
 	
-	/*
-	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
-	
-		if (crab->path_index < 0) {
-			continue;
-		}
-		
-		p = map.path[crab->path_index];
-		screen[p.y][p.x] = 'c';
+	if(crabs != NULL){
+    	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
+    	
+    		if (crab->path_index < 0) {
+    			continue;
+    		}
+    		
+    		p = map.path[crab->path_index];
+    		screen[p.y][p.x] = 'c';
+    	}
 	}
 	
-	for (Monkey *monkey = monkeys; monkey < monkeys + n_monkeys; monkey++) {
-		p = monkey->position;
-		screen[p.y][p.x] = 'm';
-	}
-	*/
+	if(monkeys != NULL){
+    	for (Monkey *monkey = monkeys; monkey < monkeys + n_monkeys; monkey++) {
+    		p = monkey->position;
+    		screen[p.y][p.x] = 'm';
+    	}
+    }
+	
 	
 	
 	for(int y = 0; y<MAP_SIZE_Y_MAX; y++) {
@@ -104,36 +102,34 @@ void display (Map map) {
 		}
 		printf("\n");
 	}
-
+	
+	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
+		free(screen[y]);
+	}
+	free(screen);
 }
 
 
-void mapMakeIsland (Map* map, int seed){
+void mapMakeIsland (Map* map){
 	if(map->map != NULL){
-        	printf("erreur possible, on demande de générer un terrain alors qu'il existe déja\n");
-        	exit(234);
+	    for(int y = 0; y<MAP_SIZE_Y_MAX; y++) {
+    		free(map->map[y]);
     	}
+        	free(map->map);
+    }
     
     
     
     
     	//initialise les variables utiles
-    	srand(seed);
-    	map->map = malloc(sizeof(char*) * MAP_SIZE_Y_MAX);
-	if (map->map == NULL){
-		printf("Allocation error: char** mapGenerate (int radius, int width, int height)\nchar ** map");
-        	exit(4110);//4110 for AllO-cation
-	}
+    map->map = malloc(sizeof(char*) * MAP_SIZE_Y_MAX);
+	testAlloc(map->map, "mapMakeIsland(), map->map");
 	for(int y = 0; y<MAP_SIZE_Y_MAX; y++) {
-		map->map[y] = NULL;
 		map->map[y] = malloc(sizeof(char) * MAP_SIZE_X_MAX);
-		if (map->map[y] == NULL) {
-			printf("Allocation error: char** mapGenerate (int radius, int width, int height)\nchar* map[y]");
-            		exit(4110);//4110 for AllO-cation
-		}
+		testAlloc(map->map[y], "mapMakeIsland(), map->map[y]");
 	}
 	
-    	float center_x = MAP_SIZE_X_MAX/2.0 ;
+    float center_x = MAP_SIZE_X_MAX/2.0 ;
 	float center_y = MAP_SIZE_Y_MAX/2.0 ;
 	double distance_x, distance_y;
 
@@ -145,12 +141,9 @@ void mapMakeIsland (Map* map, int seed){
 	int shift_x = 0;
 	int shift = 0;
 	int* shift_y = malloc(sizeof(int) * MAP_SIZE_X_MAX);
-	if (shift_y == NULL){
-		printf("Allocation error: char** mapGenerate (int radius, int width, int height)\nint* shift_y");
-        	exit(4110);//4110 for AllO-cation
-	}
+	testAlloc(shift_y, "mapMakeIsland(), shift_y");
 	for (int x=0; x<MAP_SIZE_X_MAX;x++){
-		if (shift<0-(map->width/map->height)){
+		if (shift< -(map->width/map->height)){
         	shift++;
         } else if ((map->width/map->height)<shift){
         	shift--;
@@ -162,7 +155,7 @@ void mapMakeIsland (Map* map, int seed){
     
 	//systeme de génération de l'ile
 	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
-        	if (shift_x<0-(map->height/map->width)){
+        	if (shift_x< -(map->height/map->width)){
             		shift_x++;
         	} else if ((map->height/map->width)<shift_x){
             		shift_x--;
@@ -185,6 +178,7 @@ void mapMakeIsland (Map* map, int seed){
 			}
 		}
 	}
+	free(shift_y);
 }
 
 
@@ -193,7 +187,7 @@ Vector mapPositionAway(Map map, Vector direction){
     
 	//initialise les variables utiles
 	Vector deplacement = direction;
-    	Vector position = add(vector(MAP_SIZE_X_MAX/2, MAP_SIZE_Y_MAX/2), scale(direction, MAP_SIZE_Y_MAX+MAP_SIZE_X_MAX));
+    Vector position = add(vector(MAP_SIZE_X_MAX/2, MAP_SIZE_Y_MAX/2), scale(direction, MAP_SIZE_Y_MAX+MAP_SIZE_X_MAX));
 	Vector next_position;
 	
 	//se rapproche de l'ile depuis l'exterieur
@@ -236,136 +230,278 @@ Vector mapPositionAway(Map map, Vector direction){
 }
 
 
+int isBigger(int main, int second){
+    return main>second;
+}
 
-void mapMakePath(Map* map, int seed){
-	//vérifie les donnée récuppérer
-    	if(map->path==NULL){
-        	printf("Erreur la liste n'existe pas\n mapMakePath(Map* map, int seed)");
-        	exit(243);
-    	}
-
-    
-    
-    	//initialise les variables utiles
-    	srand(seed);
-    
-    
-    	int digital_width = map->width+(2*(map->height/map->width));
-    	if (digital_width>MAP_SIZE_X_MAX){
-        	digital_width=MAP_SIZE_X_MAX;
-    	}
-    	int digital_height = map->height+(2*(map->width/map->height));
-    	if (digital_height>MAP_SIZE_Y_MAX){
-        	digital_height=MAP_SIZE_Y_MAX;
-    	}
-    	int** digital_map = malloc(sizeof(int*) * digital_height);
-    	if (digital_map == NULL){
-        	printf("Allocation error: void mapMakePath(Map* map, Vector* start_end)\ndigital_map");
-            	exit(4110);//4110 for AllO-cation
+int pathByBreadthFirst(int** digital_map, Vector digit_map_max, Vector shift, Map* map, Vector* to_visit, int* nb_visited, int* total_to_visit, int distance){
+    Vector position = to_visit[(*nb_visited)];
+    (*nb_visited)++;
+    if (map->path[1].x == position.x && map->path[1].y == position.y){
+        map->path_length = digital_map[position.y-shift.y][position.x-shift.x];
+        map->path = realloc(map->path, sizeof(Vector) * (map->path_length));
+        testAlloc(map->path, "pathByBreadthFirst(), map->path");
+        return 1;
+    }
+    position = subtract(position, shift);
+    if(0<=position.x-1){
+        if(digital_map[position.y][position.x-1] == -2){
+            digital_map[position.y][position.x-1] = digital_map[position.y][position.x]+1;
+            to_visit[(*total_to_visit)] = add(subtract(position, vector(1,0)), shift);
+            (*total_to_visit)++;
         }
-    	for (int y=0; y<digital_height; y++){
-        	digital_map[y] = calloc(digital_width, sizeof(int));
-        	if (digital_map[y] == NULL){
-            		printf("Allocation error: void mapMakePath(Map* map, Vector* start_end)\ndigital_map[y]");
-            		exit(4110);//4110 for AllO-cation
-        	}
-    	}
-    	for (int y = 0 ; y<digital_height; y++){
-        	for (int x = 0; x<digital_width; x++){
-            		printf(" %i",digital_map[y][x]);
-        	}
-        	printf("\n");
-    	}
-    	printf("\n");printf("\n");printf("\n");
-    	int nb_rem_tree = 0;
-    	Vector* removable_tree = malloc(sizeof(Vector) * MAP_SIZE_X_MAX  * MAP_SIZE_Y_MAX);
-    	if (removable_tree == NULL){
-        	printf("Allocation error: void mapMakePath(Map* map, Vector* start_end)\nremovable_tree");
-        	exit(4110);//4110 for AllO-cation
-    	}
+    }
+    if(position.x+1<digit_map_max.x){
+        if(digital_map[position.y][position.x+1] == -2){
+            digital_map[position.y][position.x+1] = digital_map[position.y][position.x]+1;
+            to_visit[(*total_to_visit)] = add(add(position, vector(1,0)), shift);
+            (*total_to_visit)++;
+        }
+    }
+    if(0<=position.y-1){
+        if(digital_map[position.y-1][position.x] == -2){
+            digital_map[position.y-1][position.x] = digital_map[position.y][position.x]+1;
+            to_visit[(*total_to_visit)] = add(subtract(position, vector(0,1)), shift);
+            (*total_to_visit)++;
+        }
+    }
+    if(position.y+1<digit_map_max.y){
+        if(digital_map[position.y+1][position.x] == -2){
+            digital_map[position.y+1][position.x] = digital_map[position.y][position.x]+1;
+            to_visit[(*total_to_visit)] = add(add(position, vector(0,1)), shift);
+            (*total_to_visit)++;
+        }
+    }
+	
+    if((*nb_visited) < (*total_to_visit)){
+        if(pathByBreadthFirst(digital_map, digit_map_max, shift, map, to_visit, nb_visited, total_to_visit, distance+1)){
+            return 1;
+        }
+    }
+    
+    return 0;
+}
 
-    	int nb_remaining_tree;
-    	int rand_tree;
-    	Vector tree;
-    
-    	float center_x = MAP_SIZE_X_MAX/2.0 ;
-	float center_y = MAP_SIZE_Y_MAX/2.0 ;
-    	Vector direction;
+
+int placePath(int** digital_map, Map* map, Vector digit_map_max, Vector shift, Vector end){
+    Vector position = end;
+    position = subtract(position, shift);
+    int val = digital_map[position.y][position.x]-1;
+    while (val != 0){
+        map->path[val] = add(position, shift);
+        if(0<position.x-1){
+            if (digital_map[position.y][position.x-1] == val){
+                position = subtract(position, vector(1,0));
+            }
+        }
+        if(position.x+1<digit_map_max.x){
+            if (digital_map[position.y][position.x+1] == val){
+                position = add(position, vector(1,0));
+            }
+        }
+        if(0<position.y-1){
+            if (digital_map[position.y-1][position.x] == val){
+                position = subtract(position, vector(0,1));
+            }
+        }
+        if(position.y+1<digit_map_max.y){
+            if (digital_map[position.y+1][position.x] == val){
+                position = add(position, vector(0,1));
+            }
+        }
+        val--;
+    }
+    map->path[val] = add(position, shift);
+}
+
+void changeCellValue(int** map, Vector size_max, int val, int new){
+    for(int y = 0; y<size_max.y; y++){
+        for(int x = 0; x<size_max.x; x++){
+            if (map[y][x] == val){
+                map[y][x] = new;
+            }
+        }
+    }
+}
 
 
-    	//parcours la map pour enregistrer les arbres suprimable et définir la map digital_map
-    	for (int y = (MAP_SIZE_Y_MAX-digital_height)/2 ; y<MAP_SIZE_Y_MAX-((MAP_SIZE_Y_MAX-digital_height)/2); y++){
-        	for (int x = (MAP_SIZE_X_MAX-digital_width)/2; x<MAP_SIZE_X_MAX-((MAP_SIZE_X_MAX-digital_width)/2); x++){
-	            	printf(" %c",map->map[y][x]);
-	            	if(map->map[y][x] == 'T'){
-	                	if(y%2==1 && x%2==1){
-	                    		map->map[y][x] = 't';
-	                	}
-	                	else if(y%2==1 || x%2==1){
-	                    		removable_tree[nb_rem_tree] = vector(x,y);
-	                    		nb_rem_tree++;
-	                	}
-	            	}
-        	}
-        	printf("\n");
+void mapMakePath(Map* map){
+	//vérifie les donnée récuppérer
+	testAlloc(map->path, "mapMakerPath(), map->path");
+
+
+
+	//initialise les variables utiles
+	int digital_width = map->width+(2*(map->height/map->width))+4;
+	if (digital_width>MAP_SIZE_X_MAX){
+    	digital_width=MAP_SIZE_X_MAX;
+	}
+	int digital_height = map->height+(2*(map->width/map->height))+4;
+	if (digital_height>MAP_SIZE_Y_MAX){
+    	digital_height=MAP_SIZE_Y_MAX;
+	}
+	
+	int** digital_map = malloc(sizeof(int*) * digital_height);
+	testAlloc(digital_map, "mapMakerPath(), digital_map");
+	for (int y=0; y<digital_height; y++){
+    	digital_map[y] = calloc(digital_width, sizeof(int));
+    	testAlloc(digital_map[y], "mapMakePath(), digital_map[y]");
+	}
+	
+	int shift_x = ((MAP_SIZE_X_MAX-digital_width)/2);
+	int shift_y = ((MAP_SIZE_Y_MAX-digital_height)/2);
+	
+	int nb_tree = 0;
+	Vector* removable_tree = malloc(sizeof(Vector) * digital_width  * digital_height);
+	testAlloc(removable_tree, "mapMakePath(), removable_tree");
+
+	int nb_remaining_tree;
+	int rand_tree;
+	Vector tree;
+	
+	int cell_val, cell1, cell2;
+
+	float center_x = MAP_SIZE_X_MAX/2.0 ;
+    float center_y = MAP_SIZE_Y_MAX/2.0 ;
+    Vector position;
+    int is_y;
+    
+    int total_to_visit;
+    int nb_visited;
+    Vector* to_visit = malloc(sizeof(Vector) * digital_width * digital_height);
+    testAlloc(to_visit, "mapMakePath(), to_visit");
+
+    
+    
+    //crée un acces, pour l'arriver et la fin, vers la parti boisser de l'ile
+    for (int i = 0; i<2; i++){
+        position = map->path[i];
+        if (position.x*position.x < position.y*position.y){
+            is_y = 1;
+        }else{
+            is_y = 0;
+        }
+        while(map->map[position.y][position.x] != 'T' || position.x %2 !=0 || position.y %2 !=0 ){
+            digital_map[position.y-shift_y][position.x-shift_x] = i-2;
+            switch (is_y){
+                case 0:
+                    if(position.x%2 != 0 || position.y%2 == 0){
+                        if(position.x<center_x){
+                            position.x++;
+                        }else{
+                            position.x--;
+                        }
+                    }
+                    is_y = 1;
+                    break;
+                case 1:
+                    if(position.y%2 != 0 || position.x%2 == 0){
+                        if(position.y<center_y){
+                            position.y++;
+                        }else{
+                            position.y--;
+                        }
+                    }
+                    is_y = 0;
+                    break;
+            }
+        }
+        digital_map[position.y-shift_y][position.x-shift_x] = i-2;
+    }
+
+	
+	//parcours la map pour enregistrer les arbres suprimable et définir la map digital_map
+	cell_val = 1;
+	for (int y = 0 ; y<digital_height; y++){
+    	for (int x = 0; x<digital_width; x++){
+            	if(map->map[y+shift_y][x+shift_x] == 'T'){
+                	if(y%2==0 && x%2==0){
+                    		map->map[y+shift_y][x+shift_x] = 't';//case de chemin possible
+                    		if(digital_map[y][x]==0){
+                        		digital_map[y][x] = cell_val;
+                        		cell_val++;
+                    		}
+                	}
+                	else if(y%2==0 || x%2==0){
+                    		removable_tree[nb_tree] = vector(x+shift_x,y+shift_y);//case de chemin liaison
+                    		nb_tree++;
+                	}
+            	}
     	}
-    	printf("\n\n\n");
-    	nb_remaining_tree = nb_rem_tree;
-    
-   	//récupére alléatoirement des abres suprimable pour ouvrir un chemin
-    
-    	while(nb_remaining_tree!=0){
-        	rand_tree = rand()%nb_rem_tree;
-        	while(removable_tree[rand_tree].x ==-1 && removable_tree[rand_tree].y ==-1){
-            		rand_tree++;
-            		if(nb_rem_tree<=rand_tree){
-                		rand_tree = 0;
-            		}
-            
-        	}
-        	tree = removable_tree[rand_tree]; 
-        	removable_tree[rand_tree] = vector(-1,-1);
-        	nb_remaining_tree--;
-        	if(tree.x%2==0){
-            		if(0<=tree.x-1 && tree.x+1<MAP_SIZE_X_MAX){
-                		map->map[tree.y][tree.x-1] = 'o';
-                		map->map[tree.y][tree.x+1] = 'o';
-            		}
-        	}
-        	else{
-            		if(0<=tree.y-1 && tree.y+1<MAP_SIZE_Y_MAX){
-                		map->map[tree.y-1][tree.x] = 'o';
-                		map->map[tree.y+1][tree.x] = 'o';
-            		}
-        	}
-    	}
-	//je me suis arreter ici pour le moment, honnetement j'ai plus en tete ce qu'il y a à la suite en bas, tkt j'ai un plan de fonctionnement pour la suite de la fonction, il me faut juste le temps
-    
-    	//crée un acces, pour l'arriver et la fin, vers la parti boisser de l'ile
-    	Vector radius_from_start;
-    	for (int i = 0; i<2; i++){
-        	if(map->path[i].x < center_x){
-            		radius_from_start.x = center_x - map->path[i].x;
-            		direction.x = 1;
-        	}else{
-            		radius_from_start.x = map->path[i].x - center_x;
-            		direction.x = -1;
-        	}
-        	if(map->path[i].y < center_y){
-            		radius_from_start.y = center_y - map->path[i].y;
-            		direction.y = 1;
-        	}else{
-            		radius_from_start.y = map->path[i].y - center_y;
-            		direction.y = -1;
-        	}
+	}
+	nb_remaining_tree = nb_tree;
+
+
+   //récupére alléatoirement des abres suprimable pour ouvrir un chemin
+
+	while(nb_remaining_tree!=0){
+    	rand_tree = rand()%nb_tree;
+    	while(removable_tree[rand_tree].x ==-1 && removable_tree[rand_tree].y ==-1){
+        		rand_tree++;
+        		if(nb_tree<=rand_tree){
+            		rand_tree = 0;
+        		}
         
-        
-        	if(radius_from_start.x < radius_from_start.y){
-            		direction.x = 0;
-        	}else{
-            		direction.y = 0;
-        	}
     	}
+    	tree = removable_tree[rand_tree]; 
+    	removable_tree[rand_tree] = vector(-1,-1);
+    	nb_remaining_tree--;
+    	if(tree.x%2==0){
+    	    if(0<=tree.y-1 && tree.y+1<MAP_SIZE_Y_MAX){
+    	        cell1 = digital_map[tree.y-shift_y-1][tree.x-shift_x];
+    	        cell2 = digital_map[tree.y-shift_y+1][tree.x-shift_x];
+    	        if(cell1 != 0 && cell2 != 0 && cell1 != cell2){
+        	        if(cell1 < cell2){
+        	            cell_val = cell1;
+        	            changeCellValue(digital_map, vector(digital_width, digital_height), cell2, cell_val);
+        	        }
+        	        else{
+        	            cell_val = cell2;
+        	            changeCellValue(digital_map, vector(digital_width, digital_height), cell1, cell_val);
+        	        }
+        	        digital_map[tree.y-shift_y][tree.x-shift_x]= cell_val;
+    	        }
+    		}
+    	}
+    	else{
+        	if(0<=tree.x-1 && tree.x+1<MAP_SIZE_X_MAX){
+        	    cell1 = digital_map[tree.y-shift_y][tree.x-shift_x-1];
+        	    cell2 = digital_map[tree.y-shift_y][tree.x-shift_x+1];
+        	    if(cell1 != 0 && cell2 != 0 && cell1 != cell2){
+            	    if( cell1 < cell2){
+        	            cell_val = cell1;
+        	            changeCellValue(digital_map, vector(digital_width, digital_height), cell2, cell_val);
+        	        }
+        	        else{
+        	            cell_val = cell2;
+        	            changeCellValue(digital_map, vector(digital_width, digital_height), cell1, cell_val);
+        	        }
+        	        digital_map[tree.y-shift_y][tree.x-shift_x]= cell_val;
+        	    }
+    		}	
+    	}
+        map->map[tree.y][tree.x] = 't';
+    }
+    
+    	
+    //parcours en largeur pour trouver la valeur -2 qui est la valeur d'arriver
+    to_visit[0] = map->path[0];
+    digital_map[map->path[0].y - shift_y][map->path[0].x - shift_x] = 1;
+    total_to_visit = 1;
+    nb_visited = 0;
+    
+    Vector end = map->path[1];
+    pathByBreadthFirst(digital_map, vector(digital_width, digital_height), vector(shift_x, shift_y), map, to_visit, &nb_visited, &total_to_visit, 2);
+	
+	//rebrouse chemin pour placer les casses du chemin
+	placePath(digital_map, map, vector(digital_width, digital_height), vector(shift_x, shift_y), end);
+	
+    for (int y=0; y<digital_height; y++){
+    	free(digital_map[y]);
+	}
+	free(digital_map);
+    free(removable_tree);
+    free(to_visit);
 }
 
 Map mapInit(int width, int height, Vector direction, int seed) {
@@ -405,30 +541,37 @@ Map mapInit(int width, int height, Vector direction, int seed) {
 	map.map = NULL;
 	map.path_length = 2;
 	map.path = malloc(sizeof(Vector) * map.path_length);
-
+    testAlloc(map.path, "mapInit(), map.path");
 	
 	
 	//genere la map
-	mapMakeIsland(&map, seed);
+	mapMakeIsland(&map);
 	
 	
 	//genere le chemin
 	map.path[0] = mapPositionAway(map, direction);
 	map.path[1] = mapPositionAway(map, subtract(vector(0,0), direction));
-	mapMakePath(&map, seed);//cette fonction va changer la taille de map.path_length et va changer map.path pour un tableau plus grand contenant le chemin
+	mapMakePath(&map);//cette fonction va changer la taille de map.path_length et va changer map.path pour un tableau plus grand contenant le chemin
 
 	
 	srand(time(NULL));
 	return map;
 }
 
+void mapReset(Map* map){
+    map->seed = 0;
+    for (int y = 0; y<map->height;y++){
+        free(map->map[y]);
+    }
+    free(map->map);
+	map->width = 0;
+	map->height = 0;
+	free(map->path);
+	map->path_length = 0;
+}
 
 int roundNumber (Map map) {
 	return (map.width + map.height) / 15;//n'est ce pas trop petit? la taille minimum est de 10|10 donc 20/15 = 1 (en int) ca risque d'etre trop peut 
 }
 
 #endif
-
-
-
-

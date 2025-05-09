@@ -1,3 +1,4 @@
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -36,7 +37,7 @@ int gameRound (GameData *data) {
 	int crabs_to_spawn = 1;
 	while (!allDead(crabs, n_crabs) && alive) {
 		
-		display(data->map, crabs, n_crabs, data->monkeys, data->n_monkeys);
+		//display(data->map, crabs, n_crabs, data->monkeys, data->n_monkeys);
 		
 		// Move crabs
 		for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
@@ -73,7 +74,7 @@ int gameRound (GameData *data) {
 
 void displayGame (GameData data) {
 	printf("Vie : %d\nBananes : %d", data.health, data.bananas);
-	display(data.map);
+	display(data.map, NULL, 0, data.monkeys, data.n_monkeys);
 }
 
 
@@ -134,13 +135,13 @@ int startGame (char *save) {
 		
 		int width = askInt(10, MAX_WIDTH);
 		int height = askInt(10, MAX_HEIGHT);
-		data.map = generate();
+		//data.map = generate();
 		// Generate, set health, place the first monkey
 		
 		
 		
 	} else {
-		load(save, &data);
+		//load(save, &data);
 	}
 	
 	return game(data);
@@ -179,5 +180,3 @@ int score (GameData data, int alive) {
 
 
 #endif
-
-
