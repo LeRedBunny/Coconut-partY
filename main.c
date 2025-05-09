@@ -1,5 +1,11 @@
-
-
+#include "save.h"
+#include "game.h"
+#include "map.h"
+#include "crabs.h"
+#include "monkey.h"
+#include "random.h"
+#include "player_interaction.h"
+#include "header.h"
 
 void mainMenu () {
 	
@@ -13,11 +19,10 @@ void mainMenu () {
 			    "Quitter"
 			    };
 	int option = choice(options, 3);
-	
+	GameData data;
 	switch (option) {
 		
 		case 1 :
-			GameData data;
 			printf("\nParamètres de la partie :");
 			
 			printf("\nHauteur de l'île :");
@@ -43,16 +48,17 @@ void mainMenu () {
 			data.bananas = 0;
 			data.rounds = roundNumber(data.map);
 			data.round_number = 0;
-			break
+			break;
 		
 		case 2 :
+			; // this line is important, don't remove
 			Save *saves = getSaves();
 			char *save_names[3];
 			for (int i = 0; i < 3; i++) {
-				save_name[i] = saves[i].name;
+				save_names[i] = saves[i].name;
 			}
-			GameData data = saves[choice(save_names, 3)].data;
-			break
+			data = saves[choice(save_names, 3)].data;
+			break;
 		
 		case 3 :
 			printf("\nAu revoir!");

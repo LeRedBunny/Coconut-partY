@@ -72,7 +72,7 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map mapInit(int width, int height, Vector direction, time_t seed);
+Map mapInit(int width, int height, Vector direction, int seed);
 
 void mapMakeIsland (Map* map);
 
@@ -100,6 +100,10 @@ Crab *randomCrabs (int n, int round_number); // Creates an array of random crabs
 
 int isDead (Crab crab);
 
+int crabTimer ();
+
+int spawnCrab(Crab *tab_crabs, int length_tab_crab);
+
 int allDead (Crab *crabs, int nb_crab);
 
 int checkKing (Crab *crabs, int n_crabs, int path_length);
@@ -121,7 +125,7 @@ void displayGame (GameData data); // Displays the map, health and bananas of the
 
 int gameRound (GameData *data); // Returns 1 if player won the round, 0 if the player lost
 
-void manage (GameData *data); // Phase of placing new monkeys and upgrading them
+int manage (GameData *data); // Phase of placing new monkeys and upgrading them
 
 int game (GameData data); // Should be given all the data needed to play
 
@@ -132,11 +136,11 @@ int score (GameData data, int alive); // Gives the player a score based on the f
 
 	// Save
 
-void load (char *save_file, GameData *data);								// <-
+Save load (int n);								// <-
 
-void save (char *save_name, GameData data);							        // <-
+void save (GameData data);							        // <-
 
-void listSaves (char *path);										// <-
+Save *getSaves ();										// <-
 
 
 
@@ -146,6 +150,10 @@ int randint (int a, int b);
 
 int askInt (int a, int b); // Asks the player to input an integer in [a; b]
 
+Vector askPosition (int width, int height);
+
 int choice (char **options, int n); // Prints the options and asks the player to choose, returns the chosen index
+
+int binaryChoice ();
 
 #endif

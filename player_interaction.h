@@ -21,7 +21,7 @@ int askInt (int a, int b) {
 	return n;
 }
 
-Vector askPosition (int height, int width) {
+Vector askPosition (int width, int height) {
 	/* Asks the player to input a vector */
 	printf("Entrez les coordonnées x et y de la position : ");
 	return vector(askInt(1, width) - 1, askInt(1, height) - 1);
@@ -45,7 +45,7 @@ int choice (char **options, int n) {
 
 int binaryChoice () {
 	/* Lets the player choose between yes and no */
-	char *yn = {"Oui", "Non"};
+	char *yn[2] = {"Oui", "Non"};
 	return choice(yn, 2);
 }
 #endif

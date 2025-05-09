@@ -2,16 +2,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-
-#include <math.h>
-
-
-#include "crabs.h"
 #include "header.h"
-#include "monkey.h"
-#include "map.h"
-#include "player_interaction.h"
-#include "random.h"
 
 
 #define START_CRABS 3
@@ -83,7 +74,7 @@ int manage (GameData *data) {
 	int quit = 0;
 	int option;
 	
-	char *options[3] =  {"Acheter",
+	char *options[4] =  {"Acheter",
 			     "Améliorer",
 			     "Passer",
 			     "Sauvegarder et quitter"
@@ -91,13 +82,13 @@ int manage (GameData *data) {
 	
 	while (!quit) {
 		printf("Voulez-vous acheter des singes, améliorer ou passer à la manche suivante ?");
-		option = choice(options, 3); 
+		option = choice(options, 4); 
 		switch (option) {
 		
-			case 1 :
+			case 0 :
 				if (data->bananas >= MONKEY_PRICE) {
 					data->bananas -= MONKEY_PRICE;
-					Vector position = askPosition(data->map.height, data->map.width);
+					Vector position = askPosition(data->map.width, data->map.height);
 					data->n_monkeys++;
 					data->monkeys[data->n_monkeys] = newMonkey(position);
 				} else {
@@ -105,12 +96,12 @@ int manage (GameData *data) {
 				}
 				break;
 			
-			case 2 :
+			case 1 :
 				if (data->bananas >= MONKEY_UPGRADE_PRICE) {
 					data->bananas -= MONKEY_UPGRADE_PRICE;
 					Monkey *monkey;
 					do {
-						monkey = monkeyAt(askPosition(data->map.height, data->map.width), data->monkeys, data->n_monkeys);
+						monkey = monkeyAt(askPosition(data->map.width, data->map.height), data->monkeys, data->n_monkeys);
 					} while (monkey == NULL);
 					upMonkey(monkey);
 				} else {
@@ -118,14 +109,16 @@ int manage (GameData *data) {
 				}
 				break;
 			
-			case 3 :
+			case 2 :
 				quit = 1;
 				break;
 			
-			case 4 :
-			
+			case 3 :
+				save(*data);
+				return 1;
 		}
 	}
+	return 0;
 }
 
 
