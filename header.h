@@ -86,6 +86,8 @@ int roundNumber (Map map); // Calculates the number of rounds to play to win on 
 
 char getTile (Map map, Vector position);
 
+int maxMonkeys (Map map);
+
 	// Crabs
 
 int move (Crab *crab, Map map);
