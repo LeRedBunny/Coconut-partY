@@ -1,4 +1,3 @@
-#include "header.h"
 #include "map.h"
 #include "monkey.h"
 #include "crabs.h"
@@ -12,24 +11,21 @@
 Vector randomPosition (Map map) {
     Vector position;
     do {
-        position = vector(randint((MAP_SIZE_X_MAX-map.width)/2, WIDTH-((MAP_SIZE_X_MAX-map.width)/2)), randint((MAP_SIZE_Y_MAX-map.height)/2, MAP_SIZE_Y_MAX-((MAP_SIZE_Y_MAX-map.height)/2)));
-    } while (getTile(map, position) == 'w');
+        position = vector(randint(0, map.width - 1), randint(0, map.height - 1));
+    } while (getTile(map, position) != 'T');
     return position;
 }
 
-
-
 int main () {
-    Map map = mapInit(1000, 1000, DIR_RIGHT, time(NULL));
-    
-    
+    Map map = mapInit(WIDTH, HEIGHT, DIR_RIGHT, time(NULL));
+    printf("map faite");
     Crab *crabs = randomCrabs(CRABS, 1);
+    printf("crabes faits");
     Monkey monkeys[MONKEYS];
     for (int i = 0; i < MONKEYS; i++) {
-    	
         monkeys[i] = newMonkey(randomPosition(map));
     }
-    display(map, NULL, 0, NULL, 0);
-    
+    printf("singes faites");
+    //display(map, crabs, CRABS, monkeys, MONKEYS);
     return 0;
 }

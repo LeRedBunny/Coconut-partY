@@ -72,7 +72,7 @@ float distance (Vector u, Vector v);
 	// Map
 
 
-Map mapInit(int width, int height, Vector direction, int seed);
+Map mapInit(int width, int height, Vector direction, time_t seed);
 
 void mapMakeIsland (Map* map);
 
@@ -122,8 +122,6 @@ void displayGame (GameData data); // Displays the map, health and bananas of the
 int gameRound (GameData *data); // Returns 1 if player won the round, 0 if the player lost
 
 void manage (GameData *data); // Phase of placing new monkeys and upgrading them
-
-int startGame (char *save); // save is a string containing the save file path, or NULL if new game	<-
 
 int game (GameData data); // Should be given all the data needed to play
 
