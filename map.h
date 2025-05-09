@@ -581,7 +581,11 @@ void mapReset(Map* map){
 }
 
 int roundNumber (Map map) {
-	return (map.width + map.height) / 10;//n'est ce pas trop petit? la taille minimum est de 10|10 donc 20/15 = 1 (en int) ca risque d'etre trop peut 
+	return map.path_length / 5;
+}
+
+int maxMonkeys (Map map) {
+	return map.path_length / 5;
 }
 
 char getTile (Map map, Vector position) {
