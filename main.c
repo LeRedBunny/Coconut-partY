@@ -1,66 +1,57 @@
-#include "save.h"
 #include "game.h"
 #include "map.h"
 #include "crabs.h"
 #include "monkey.h"
 #include "random.h"
 #include "player_interaction.h"
-#include "header.h"
+
+
 
 void mainMenu () {
 	
-	char *oui_non[2] = {"Oui", "Non"};
 	
-	printf("Bienvenue à Coconut PartY!");
+	printf("\nBienvenue à Coconut PartY!");
 	
-	char *options[3] = {
+	char *options[2] = {
 			    "Démarrer",
-			    "Continuer",
 			    "Quitter"
 			    };
-	int option = choice(options, 3);
+	int option = choice(options, 2);
 	GameData data;
 	switch (option) {
 		
-		case 1 :
-			printf("\nParamètres de la partie :");
+		case 0 :
+			printf("\nParamètres de la partie : ");
 			
-			printf("\nHauteur de l'île :");
-			int height = askInt(0, MAX_HEIGHT);
+			printf("\nHauteur de l'île : ");
+			int height = askInt(0, MAP_SIZE_Y_MAX);
 			
-			printf("\nLargeur de l'île");
-			int width = askInt(0, MAX_WIDTH);
+			printf("\nLargeur de l'île : ");
+			int width = askInt(0, MAP_SIZE_X_MAX);
 			
 			unsigned long seed;
 			printf("\nSouhaitez-vous entrer une seed ?");
-			if (binaryChoice()) {
+			if (!binaryChoice()) {
+				printf("\nSeed : ");
 				scanf("%d", &seed);
 			} else {
 				seed = time(NULL);
+				printf("\nSeed : %d", seed);
 			}
 			
 			printf("\nEntrez le nombre de PV : ");
 			data.health = askInt(1, 10);
 			
 			data.map = mapInit(width, height, DIR_RIGHT, seed);
-			data.monkeys = malloc(sizeof(Monkey) * maxMonkeys(data.map));
-			data.n_monkeys = 1;
-			data.bananas = 0;
+			data.max_monkeys = maxMonkeys(data.map);
+			data.monkeys = malloc(sizeof(Monkey) * data.max_monkeys);
+			data.n_monkeys = 0;
+			data.bananas = 10;
 			data.rounds = roundNumber(data.map);
 			data.round_number = 0;
 			break;
 		
-		case 2 :
-			; // this line is important, don't remove
-			Save *saves = getSaves();
-			char *save_names[3];
-			for (int i = 0; i < 3; i++) {
-				save_names[i] = saves[i].name;
-			}
-			data = saves[choice(save_names, 3)].data;
-			break;
-		
-		case 3 :
+		case 1 :
 			printf("\nAu revoir!");
 			exit(0);
 	}

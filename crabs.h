@@ -14,7 +14,7 @@
 #define SIZE 4
 
 #define AVG_CRAB_TIMER 4
-#define TIMER_VARIANCE 3
+#define TIMER_VARIANCE 2
 
 #define DEATH_INDEX -1
 #define BEFORE_SPAWN_INDEX -2
@@ -25,7 +25,7 @@ int crabTimer () {
 	/* Returns a new value for the crab spawn timer */
 	return AVG_CRAB_TIMER + randint(-TIMER_VARIANCE, TIMER_VARIANCE);
 }
-	
+
 void kill (Crab *crab){
 	crab->path_index = DEATH_INDEX;
 }  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
@@ -44,8 +44,8 @@ int move (Crab *crab, Map map){
 int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	for(int i = 0; i < length_tab_crab; i++){
 		if(tab_crabs[i].path_index == BEFORE_SPAWN_INDEX){
-			tab_crabs[i].path_index == 0;
-			return 1;
+			tab_crabs[i].path_index = 0;
+            return i < length_tab_crab;
 		}
 	}
 	return 0;
@@ -59,8 +59,8 @@ Crab randomCrab (int round_number){
     }
     
     Crab crab;
-    crab.path_index = 0;
-    crab.health = (round_number * COEF_EVOLUTION) * randint(16,28);
+    crab.path_index = BEFORE_SPAWN_INDEX;
+    crab.health = (round_number * COEF_EVOLUTION) * randint(8,16);
     if ((round_number * COEF_EVOLUTION) * randint(1,11) >10){
         crab.speed =2;
     }else{
@@ -84,8 +84,8 @@ Crab *randomCrabs (int n, int round_number){
 }//Crée n crabs aléatoirement, en fonction du tour actuel, dans une liste renvoyé
 
 int isDead (Crab crab){
-    return crab.health <= 0;
-}//return 1 si le crabe n'as plus de vie, 0 sinon
+    return crab.path_index == DEATH_INDEX;
+}
 
 int allDead (Crab *crabs, int nb_crab){
     for (int i =0; i<nb_crab; i++){
@@ -107,6 +107,11 @@ int checkKing (Crab *crabs, int n_crabs, int path_length) {
 		}
 	}
 	return 0;
+}
+
+
+int bananaDrop (Crab crab) {
+    return 3 + 2 * crab.speed;
 }
 
 #endif

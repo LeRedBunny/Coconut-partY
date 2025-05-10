@@ -2,10 +2,6 @@
 #ifndef MONKEY_H
 #define MONKEY_H
 
-
-#include <stdio.h>
-
-
 #include "crabs.h"
 #include "header.h"
 #include "map.h"
@@ -42,32 +38,32 @@ void upMonkey(Monkey *monkey){
 }
 
 int shoot (Monkey monkey, Crab *crabs, int n_crab, Map map){
-	/*attacks the oldest crab created, near the monkey*/
-	Vector distance;
+	/*attacks the oldest crab created, near the monkey, and returns the bananas gained */
+	float distance;
 	int n = n_crab-1;
 	int killed = 0;
 	while(0<=n){
 		if(0 < crabs[n].health){
-			distance = subtract(monkey.position, map.path[crabs[n].path_index]);
-			if(distance.x * distance.x + distance.y * distance.y <= monkey.range*monkey.range){
+			distance = length(subtract(monkey.position, map.path[crabs[n].path_index]));
+			if(distance <= monkey.range){
 				crabs[n].health -= monkey.damage;
-				printf("attaque crabe n°%d par singe en position (%d,%d)!\n", n, monkey.position.x, monkey.position.y);// a enlever durant l'intégration dans le code principale
 				if( crabs[n].health <= 0){
+					printf("\nUn singe a tué le crabe n°%d!", 1 + n);
 					kill(crabs + n);
-					killed = 1;
+					return bananaDrop(*(crabs + n));
 				}
 				n = -1;
 			}
 		}
 		n--;
 	}
-	return killed;
+	return 0;
 }
 
 
 Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys) {
 	/* Returns a pointer to the monkey at the given position, NULL if there is no monkey */
-	for (Monkey *monkey = monkeys; monkey < monkeys +n_monkeys; monkey++) {
+	for (Monkey *monkey = monkeys; monkey < monkeys + n_monkeys; monkey++) {
 		if (monkey->position.x == position.x && monkey->position.y == position.y) {
 			return monkey;
 		}

@@ -3,33 +3,43 @@
 #define GAME_H
 
 #include "header.h"
+#include "map.h"
 
 
-#define START_CRABS 3
+#define START_CRABS 2
 #define CRAB_MULTIPLIER 1.2
 #define MAX_HEIGHT 100
 #define MAX_WIDTH 100
 #define MONKEY_PRICE 25
 #define MONKEY_UPGRADE_PRICE 15
-#define CRAB_BANANA_DROP 10
 
 int gameRound (GameData *data) {
 	/* Runs a single round/wave of crabs, returns 1 if player won and 0 if they lost */
 	
 	// Create crabs
 	int n_crabs = START_CRABS * pow(CRAB_MULTIPLIER, data->round_number);
-	Crab *crabs = malloc(n_crabs * sizeof(Crab));
-	if (crabs == NULL) {exit(1); }
-	
+	Crab *crabs = randomCrabs(n_crabs, data->round_number);
 	
 	// Main round
 	int alive = 1;
-	int crab_timer = crabTimer();
+	int crab_timer = 1;
 	int crabs_to_spawn = 1;
-	while (!allDead(crabs, n_crabs) && alive) {
+	int bananas_gained;
+	int crabs_spawned = 0;
+	while (alive && !allDead(crabs, n_crabs)) {
 		
-		//display(data->map, crabs, n_crabs, data->monkeys, data->n_monkeys);
-		
+		sleep(1);
+		displayGame(*data, crabs, n_crabs, crabs_spawned);
+
+		// Shoot crabs
+		for (Monkey *monkey = data->monkeys; monkey < data->monkeys + data->n_monkeys; monkey++) {
+			bananas_gained = shoot(*monkey, crabs, n_crabs, data->map);
+			if (bananas_gained) {
+				printf("\nVous avez obtenu %d Bananes !", bananas_gained);
+				data->bananas += bananas_gained;
+			} 
+		}
+
 		// Move crabs
 		for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
 			if (crab->path_index >= 0) {
@@ -37,18 +47,15 @@ int gameRound (GameData *data) {
 			}
 		}
 		
-		// Shoot crabs
-		for (int i = 0; i < data->n_monkeys; i++) {
-			data->bananas += CRAB_BANANA_DROP * shoot(data->monkeys[i], crabs, n_crabs, data->map); 
-		}
-		
 		// Spawn in a new crab
 		crab_timer -= crabs_to_spawn;
 		if (!crab_timer) {
+			crabs_spawned++;
 			crab_timer = crabTimer();
 			crabs_to_spawn = spawnCrab(crabs, n_crabs);
 		}
 		
+		// Check death
 		data->health -= checkKing(crabs, n_crabs, data->map.path_length);
 		if (!data->health) {
 			alive = 0;
@@ -63,11 +70,23 @@ int gameRound (GameData *data) {
 
 
 
-void displayGame (GameData data) {
-	printf("Vie : %d\nBananes : %d", data.health, data.bananas);
-	display(data.map, NULL, 0, data.monkeys, data.n_monkeys);
+void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned) {
+	printf("\nManche %d/%d : %d/%d Crabes\nVie : %d    Bananes : %d\n", data.round_number, data.rounds, crabs_spawned, n_crabs, data.health, data.bananas);
+	display(data.map, crabs, n_crabs, data.monkeys, data.n_monkeys);
 }
 
+
+void placeMonkey (GameData *data) {
+	/*  */
+	Vector position;
+	char tile;
+	do {
+		position = subtract(askPosition(MAP_SIZE_X_MAX, MAP_SIZE_Y_MAX), vector(1, 1));
+		tile = getTile(data->map, position);
+	} while (tile == 'w' || tile == 'p');
+	data->monkeys[data->n_monkeys] = newMonkey(position);
+	data->n_monkeys++;
+}
 
 int manage (GameData *data) {
 	/* Returns 1 if player quits */
@@ -77,22 +96,23 @@ int manage (GameData *data) {
 	char *options[4] =  {"Acheter",
 			     "Améliorer",
 			     "Passer",
-			     "Sauvegarder et quitter"
+			     "Quitter"
 			     };
 	
 	while (!quit) {
-		printf("Voulez-vous acheter des singes, améliorer ou passer à la manche suivante ?");
+		printf("\nVous avez %d Bananes et %d PV !", data->bananas, data->health);
+		printf("\nVoulez-vous acheter des singes (%d bananes), améliorer (%d bananes) ou passer à la manche suivante ?", MONKEY_PRICE, MONKEY_UPGRADE_PRICE);
 		option = choice(options, 4); 
 		switch (option) {
-		
+			
 			case 0 :
-				if (data->bananas >= MONKEY_PRICE) {
-					data->bananas -= MONKEY_PRICE;
-					Vector position = askPosition(data->map.width, data->map.height);
-					data->n_monkeys++;
-					data->monkeys[data->n_monkeys] = newMonkey(position);
+				if (data->bananas < MONKEY_PRICE) {
+					printf("\nVous n'avez que %d bananes...", data->bananas);
+				} else if (data->n_monkeys >= data->max_monkeys) {
+					printf("\nVous avez atteint le maximum de singes.");
 				} else {
-					printf("Vous n'avez que %d bananes...", data->bananas);
+					data->bananas -= MONKEY_PRICE;
+					placeMonkey(data);
 				}
 				break;
 			
@@ -101,7 +121,7 @@ int manage (GameData *data) {
 					data->bananas -= MONKEY_UPGRADE_PRICE;
 					Monkey *monkey;
 					do {
-						monkey = monkeyAt(askPosition(data->map.width, data->map.height), data->monkeys, data->n_monkeys);
+						monkey = monkeyAt(subtract(askPosition(MAP_SIZE_X_MAX, MAP_SIZE_Y_MAX), vector(1, 1)), data->monkeys, data->n_monkeys);
 					} while (monkey == NULL);
 					upMonkey(monkey);
 				} else {
@@ -114,22 +134,25 @@ int manage (GameData *data) {
 				break;
 			
 			case 3 :
-				save(*data);
 				return 1;
 		}
 	}
 	return 0;
 }
 
-
 int game (GameData data) {
 	/* Returns 0 if the player quit */
 	int alive = 1;
 	int quit = 0;
+
+	display(data.map, NULL, 0, NULL, 0);
+	printf("\nPlacez votre premier singe : ");
+	placeMonkey(&data);
+
 	while (data.round_number < data.rounds && alive && !quit) {
 		
 		data.round_number++;
-		printf("Manche %d/%d !", data.round_number, data.rounds);
+		printf("\nManche %d/%d !", data.round_number, data.rounds);
 		
 		quit = manage(&data);
 		if (!quit) {
@@ -137,10 +160,9 @@ int game (GameData data) {
 		}
 	}
 	
-	if (quit) {
+	if (alive) {
 		return score(data, alive);
 	} else {
-		save(data);
 		return 0;
 	}
 }

@@ -1,39 +1,23 @@
 #include "map.h"
 #include "monkey.h"
+#include "game.h"
 #include "crabs.h"
+#include "player_interaction.h"
 
-#define CRABS 5
-#define MONKEYS 2
-#define HEIGHT 30
-#define WIDTH 30
-
-
-Vector randomPosition (Map map) {
-    Vector position;
-    Vector *trees = malloc(sizeof(Vector) * map.width * map.height);
-    int i = 0;
-    for (int x = 0; x < map.width; x++) {
-        for (int y = 0; y < map.height; y++) {
-            position = vector(x, y);
-            if (getTile(map, position)) {
-                trees[i] = position;
-                i++;
-            }
-        }
-    }
-    return trees[randint(0, i - 1)];
-}
+#define WIDTH 20
+#define HEIGHT 20
 
 int main () {
-    Map map = mapInit(WIDTH, HEIGHT, DIR_RIGHT, time(NULL));
-    printf("map faite\n");
-    Crab *crabs = randomCrabs(CRABS, 1);
-    printf("crabes faits\n");
-    Monkey monkeys[MONKEYS];
-    for (int i = 0; i < MONKEYS; i++) {
-        monkeys[i] = newMonkey(randomPosition(map));
-    }
-    printf("singes faits\n");
-    display(map, crabs, CRABS, monkeys, MONKEYS);
+    
+    GameData data;
+    data.map = mapInit(WIDTH, HEIGHT, DIR_RIGHT, time(NULL));
+    data.monkeys = malloc(sizeof(Monkey) * maxMonkeys(data.map));
+    data.n_monkeys = 0;
+    data.bananas = 10;
+    data.health = 10;
+    data.rounds = roundNumber(data.map);
+    data.round_number = 0;
+    game(data);
+    printf("\nDone! 😁");
     return 0;
 }

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <unistd.h>
 
 
 typedef struct {
@@ -41,16 +41,10 @@ typedef struct {
 	int round_number, rounds;
 	Map map;
 	Monkey *monkeys;
-	int n_monkeys;
+	int n_monkeys, max_monkeys;
 	int health;
 	int bananas;
 } GameData;
-
-typedef struct {
-	char *name;
-	GameData data;
-} Save;
-
 
 	// Vector
 
@@ -121,27 +115,17 @@ Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys);
 
 	// Game
 
-void displayGame (GameData data); // Displays the map, health and bananas of the player
+void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned); // Displays the map, health and bananas of the player
 
 int gameRound (GameData *data); // Returns 1 if player won the round, 0 if the player lost
 
 int manage (GameData *data); // Phase of placing new monkeys and upgrading them
 
-int game (GameData data); // Should be given all the data needed to play
+int game (GameData data); 
 
+void placeMonkey (GameData *data);
 
 int score (GameData data, int alive); // Gives the player a score based on the final state of the game
-
-
-
-	// Save
-
-Save load (int n);								// <-
-
-void save (GameData data);							        // <-
-
-Save *getSaves ();										// <-
-
 
 
 	// Other
@@ -152,7 +136,7 @@ int askInt (int a, int b); // Asks the player to input an integer in [a; b]
 
 Vector askPosition (int width, int height);
 
-int choice (char **options, int n); // Prints the options and asks the player to choose, returns the chosen index
+int choice (char *options[], int n); // Prints the options and asks the player to choose, returns the chosen index
 
 int binaryChoice ();
 
