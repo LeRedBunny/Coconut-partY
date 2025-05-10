@@ -1,15 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 typedef struct {
     GameData Data;
-    char name[];
+    char name[20];
 } Save;
 
 int fichierEstVide(const char *nomFichier) {
     FILE *f = fopen(nomFichier, "rb");
     if (f == NULL) {
-        perror("Erreur lors de l'ouverture du fichier");
+        printf("Erreur lors de l'ouverture du fichier");
         return -1; 
     }
 
@@ -20,45 +21,53 @@ int fichierEstVide(const char *nomFichier) {
     return (taille == 0);  
 }
 
-void save(GameData data){ // il faudra créer 3 fichiers binaires : un fichierSauvegarde1, fichierSauvegarde2, fichierSauvegarde3 pour chacune des sauvegardes
+void saveGame(GameData data){ // il faudra créer 3 fichiers binaires : save1, save2, save3 pour chacune des sauvegardes
     char choix[15];
     int num;
-    if(fichierEstVide(fichierSauvegarde1)){
-        FILE *fichier = fopen(fichierSauvegarde1, "wb");
+    Save save;
+    save.Data = data;
+    do{
+        printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
+        scanf("%s", save.name);
+    }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
+    if(fichierEstVide(save1)){
+        FILE *fichier = fopen(save1, "wb");
         if(fichier == NULL){
             printf("Erreur d'ouverture du fichier.\n");
             exit(EXIT_FAILURE);
         }
-        int ecrits = fwrite(data, sizeof(data), 1, fichier);
+        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
         if(ecrits != 1){
             printf("Erreur d'écriture dans le fichier.\n");
         }
         fclose(fichier);
     }
 
-    else if(fichierEstVide(fichierSauvegarde2)){
-    FILE *fichier = fopen(fichierSauvegarde2, "wb");
-    if(fichier == NULL){
-        printf("Erreur d'ouverture du fichier.\n");
-        exit(EXIT_FAILURE);
+    else if(fichierEstVide(save2)){
+        FILE *fichier = fopen(save2, "wb");
+        if(fichier == NULL){
+            printf("Erreur d'ouverture du fichier.\n");
+            exit(EXIT_FAILURE);
+        }
+        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
+        if(ecrits != 1){
+            printf("Erreur d'écriture dans le fichier.\n");
+        }
+        fclose(fichier);
+
     }
-    int ecrits = fwrite(Data, sizeof(Data), 1, fichier);
-    if(ecrits != 1){
-        printf("Erreur d'écriture dans le fichier.\n");
-    }
-    fclose(fichier);
-    }
-    else if(fichierEstVide(fichierSauvegarde3)){
-    FILE *fichier = fopen(fichierSauvegarde3, "wb");
-    if(fichier == NULL){
-        printf("Erreur d'ouverture du fichier.\n");
-        exit(EXIT_FAILURE);
-    }
-    int ecrits = fwrite(Data, sizeof(Data), 1, fichier);
-    if(ecrits != 1){
-        printf("Erreur d'écriture dans le fichier.\n");
-    }
-    fclose(fichier);
+    else if(fichierEstVide(save3)){
+        FILE *fichier = fopen(save3, "wb");
+        if(fichier == NULL){
+            printf("Erreur d'ouverture du fichier.\n");
+            exit(EXIT_FAILURE);
+        }
+        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
+        if(ecrits != 1){
+            printf("Erreur d'écriture dans le fichier.\n");
+        }
+        fclose(fichier);
+
     }
     else{
         printf("Toutes les sauvegardes sont actuellement utilisées, voulez-vous ECRASER une sauvegarde ou ABANDONNER ?");
@@ -71,36 +80,36 @@ void save(GameData data){ // il faudra créer 3 fichiers binaires : un fichierSa
                 printf("Quelles sauvegardes voulez-vous écraser ? 1, 2 ou 3 ?\n");
                 scanf("%d", &num);
                 if(num == 1){
-                    FILE *f = fopen("fichierSauvegarde1", "wb");
+                    FILE *f = fopen("save1", "wb");
                     if (f == NULL) {
                         printf("Erreur lors de l'ouverture du fichier");
                     }
                     else {
                     fclose(f);
                     }
-                    save(GameData data);
+                    saveGame(data);
                     exit(1);
                 }
                 if(num == 2){
-                    FILE *f = fopen("fichierSauvegarde2", "wb");
+                    FILE *f = fopen("save2", "wb");
                     if (f == NULL) {
                         printf("Erreur lors de l'ouverture du fichier");
                     }
                     else {
                     fclose(f);
                     }
-                    save(GameData data);
+                    saveGame(data);
                     exit(1);
                 }
                 if(num == 3){
-                    FILE *f = fopen("fichierSauvegarde3", "wb");
+                    FILE *f = fopen("save3", "wb");
                     if (f == NULL) {
                         printf("Erreur lors de l'ouverture du fichier");
                     }
                     else {
                     fclose(f);
                     }
-                    save(GameData data);
+                    saveGame(data);
                     exit(1);
                 }
             }
@@ -111,8 +120,52 @@ void save(GameData data){ // il faudra créer 3 fichiers binaires : un fichierSa
 
 Save* getSaves(){
     Save tab[3];
+    FILE *fichier1 = fopen(save1, "rb");
+    if(fichier1 == NULL){
+        printf("Erreur d'ouverture du fichier.\n");
+        exit(EXIT_FAILURE);
+    }
+    int lus = fread(tab, sizeof(Save), 1, fichier1);
+    if(lus == 0){
+        printf("La sauvegarde 1 est vide.\n");
+    }
+    else if(lus != 1){
+        printf("Erreur de lecture dans le fichier.\n");
+    }
+    fclose(fichier1);
+
+    FILE *fichier2 = fopen(save2, "rb");
+    if(fichier2 == NULL){
+        printf("Erreur d'ouverture du fichier.\n");
+        exit(EXIT_FAILURE);
+    }
+    int lus = fread(tab + 1, sizeof(Save), 1, fichier2);
+    if(lus == 0){
+        printf("La sauvegarde 2 est vide.\n");
+    }
+    else if(lus != 1){
+        printf("Erreur de lecture dans le fichier.\n");
+    }
+    fclose(fichier2);
+
+    FILE *fichier3 = fopen(save3, "rb");
+    if(fichier3 == NULL){
+        printf("Erreur d'ouverture du fichier.\n");
+        exit(EXIT_FAILURE);
+    }
+    int lus = fread(tab + 2, sizeof(Save), 1, fichier3);
+    if(lus == 0){
+        printf("La sauvegarde 3 est vide.\n");
+    }
+    else if(lus != 1){
+        printf("Erreur de lecture dans le fichier.\n");
+    }
+    fclose(fichier3);
+    return tab;
 }
 
 Save load(int n){
-
+    Save save;
+    save = getSaves()[n - 1];
+    return save;
 }
