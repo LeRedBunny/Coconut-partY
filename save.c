@@ -1,3 +1,6 @@
+#ifdef SAVE_H
+#define SAVE_H
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -163,3 +166,5 @@ Save load(int n){
     save = getSaves()[n - 1];
     return save;
 }
+
+#endif
