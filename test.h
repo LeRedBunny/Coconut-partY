@@ -8,9 +8,21 @@ void testAlloc(void* p, char* from){
     }
 
     if (p == NULL){
-            printf("Allocation error:\nFROM: %s", from);
-            exit(4110);//4110 for AllO-cation
+            printf("Erreur d'allocation:\nVenant de: %s", from);
+            exit(41);//41 for Al-location
         }
+}
+
+
+void testComparison(int operation, char* from){
+    if(from == NULL){
+        from = "information non fourni...";
+    }
+    
+    if (!operation){
+        printf("Erreur de parametre, les données ne sont pas celles attendue:\nVenant de: %s\nVérifier bien que le test éffectuer correspond à la valeur attendue", from);
+        exit(54);//54 for VA-lue
+    }
 }
 
 
