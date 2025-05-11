@@ -6,18 +6,18 @@
 #include<string.h>
 
 
-int EmptyFile(const char *nomFichier) {    //If the character size in a file is empty, return 1
-    FILE *f = fopen(nomFichier, "rb");
+int EmptyFile(const char *nameFile) {    //If the character size in a file is empty, return 1
+    FILE *f = fopen(nameFile, "rb");
     if (f == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
         return -1; 
     }
 
     fseek(f, 0, SEEK_END);       
-    long taille = ftell(f);     
+    long length = ftell(f);     
     fclose(f);
 
-    return (taille == 0);  
+    return (length == 0);  
 }
 
 void verif_and_crea(){    //check if save files 1, 2 and 3 are created, and if not, create them
@@ -65,61 +65,61 @@ void verif_and_crea(){    //check if save files 1, 2 and 3 are created, and if n
 }
 
 int saveGame(GameData data){
-    char choix[15];
+    char choices[15];
     int num;
     Save save;
     save.data = data;
     verif_and_crea();
     if(EmptyFile("save1.bin")){    //search an empty file between save1, save2 and save3 to save the structure containing the name and all the game data
-        FILE *fichier = fopen("save1.bin", "wb");
-        if(fichier == NULL){
+        FILE *file = fopen("save1.bin", "wb");
+        if(file == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
         do{
             printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
             scanf("%s", save.name);
         }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
-        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
-        if(ecrits != 1){
+        int write = fwrite(&save, sizeof(Save), 1, file);
+        if(write != 1){
             perror("Erreur d'écriture dans le fichier.");
         }
-        fclose(fichier);
+        fclose(file);
         printf("Votre sauvegarde a eu lieu dans l'emplacement 1.\n");
         return 1;
     }
 
     else if(EmptyFile("save2.bin")){
-        FILE *fichier = fopen("save2.bin", "wb");
-        if(fichier == NULL){
+        FILE *file = fopen("save2.bin", "wb");
+        if(file == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
         do{
             printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
             scanf("%s", save.name);
         }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
-        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
-        if(ecrits != 1){
+        int write = fwrite(&save, sizeof(Save), 1, file);
+        if(write != 1){
             perror("Erreur d'écriture dans le fichier.");
         }
-        fclose(fichier);
+        fclose(file);
         printf("Votre sauvegarde a eu lieu dans l'emplacement 2.\n");
         return 1;
     }
 
     else if(EmptyFile("save3.bin")){
-        FILE *fichier = fopen("save3.bin", "wb");
-        if(fichier == NULL){
+        FILE *file = fopen("save3.bin", "wb");
+        if(file == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
         do{
             printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
             scanf("%s", save.name);
         }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
-        int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
-        if(ecrits != 1){
+        int write = fwrite(&save, sizeof(Save), 1, file);
+        if(write != 1){
             perror("Erreur d'écriture dans le fichier.");
         }
-        fclose(fichier);
+        fclose(file);
         printf("Votre sauvegarde a eu lieu dans l'emplacement 3.\n");
         return 1;
     }
@@ -127,11 +127,11 @@ int saveGame(GameData data){
     else{  //if all saves are used, ask the user to choose between give up or overwriting on a save
         printf("Toutes les sauvegardes sont actuellement utilisées, voulez-vous ECRASER une sauvegarde ou ABANDONNER ?");
         do {
-            scanf("%s", &choix);
-            if(strcmp(choix, "Abandonner") == 0 || strcmp(choix, "abandonner") == 0 || strcmp(choix, "ABANDONNER") == 0){
+            scanf("%s", &choices);
+            if(strcmp(choices, "Abandonner") == 0 || strcmp(choices, "abandonner") == 0 || strcmp(choices, "ABANDONNER") == 0){
             exit(1);
             }   
-            else if(strcmp(choix, "ECRASER") == 0 || strcmp(choix, "Ecraser") == 0 || strcmp(choix, "écraser") == 0 || strcmp(choix, "ecraser") == 0){
+            else if(strcmp(choices, "ECRASER") == 0 || strcmp(choices, "Ecraser") == 0 || strcmp(choices, "écraser") == 0 || strcmp(choices, "ecraser") == 0){
                 printf("Quelles sauvegardes voulez-vous écraser ? 1, 2 ou 3 ?\n"); //ask the number to overwriting, clean this file, and save in
                 scanf("%d", &num);
                 if(num == 1){
@@ -168,51 +168,51 @@ int saveGame(GameData data){
                     return 1;
                 }
             }
-            printf("Je n'ai pas compris, voulez-vous abandonner ou écraser ?"); //loop as he doesn't tap "give up" or "overwriting"
-        }while(strcmp(choix, "Abandonner") != 0 || strcmp(choix, "abandonner") != 0 || strcmp(choix, "ABANDONNER") != 0 || strcmp(choix, "ECRASER") != 0 || strcmp(choix, "Ecraser") != 0 || strcmp(choix, "écraser") != 0 || strcmp(choix, "ecraser") != 0);
+            printf("Je n'ai pas compris, voulez-vous abandonner ou écraser ?"); //loop as he doesn't tap give up or overwriting
+        }while(strcmp(choices, "Abandonner") != 0 || strcmp(choices, "abandonner") != 0 || strcmp(choices, "ABANDONNER") != 0 || strcmp(choices, "ECRASER") != 0 || strcmp(choices, "Ecraser") != 0 || strcmp(choices, "écraser") != 0 || strcmp(choices, "ecraser") != 0);
     }
 }
 
 Save* getSaves(){  //takes the data from the 3 saves in an array, passing from the binary to the save structure and return the pointer of this array
     Save *tab = malloc(3 * sizeof(Save));
-    FILE *fichier1 = fopen("save1.bin", "rb");
-    if(fichier1 == NULL){
+    FILE *file1 = fopen("save1.bin", "rb");
+    if(file1 == NULL){
         perror("Erreur d'ouverture du fichier.");
     }
-    int lus1 = fread(tab, sizeof(Save), 1, fichier1);
-    if(lus1 == 0){
+    int read1 = fread(tab, sizeof(Save), 1, file1);
+    if(read1 == 0){
         printf("La sauvegarde 1 est vide.\n");
     }
-    else if(lus1 != 1){
+    else if(read1 != 1){
         perror("Erreur de lecture dans le fichier.");
     }
-    fclose(fichier1);
+    fclose(file1);
 
-    FILE *fichier2 = fopen("save2.bin", "rb");
-    if(fichier2 == NULL){
+    FILE *file2 = fopen("save2.bin", "rb");
+    if(file2 == NULL){
         perror("Erreur d'ouverture du fichier.");
     }
-    int lus2 = fread(tab + 1, sizeof(Save), 1, fichier2);
-    if(lus2 == 0){
+    int read2 = fread(tab + 1, sizeof(Save), 1, file2);
+    if(read2 == 0){
         printf("La sauvegarde 2 est vide.\n");
     }
-    else if(lus2 != 1){
+    else if(read2 != 1){
         perror("Erreur de lecture dans le fichier.");
     }
-    fclose(fichier2);
+    fclose(file2);
 
-    FILE *fichier3 = fopen("save3.bin", "rb");
-    if(fichier3 == NULL){
+    FILE *file3 = fopen("save3.bin", "rb");
+    if(file3 == NULL){
         perror("Erreur d'ouverture du fichier.");
     }
-    int lus3 = fread(tab + 2, sizeof(Save), 1, fichier3);
-    if(lus3 == 0){
+    int read3 = fread(tab + 2, sizeof(Save), 1, file3);
+    if(read3 == 0){
         printf("La sauvegarde 3 est vide.\n");
     }
-    else if(lus3 != 1){
+    else if(read3 != 1){
         perror("Erreur de lecture dans le fichier.");
     }
-    fclose(fichier3);
+    fclose(file3);
     return tab;
 }
 
