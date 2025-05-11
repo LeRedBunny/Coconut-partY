@@ -46,11 +46,19 @@ typedef struct {
 	int bananas;
 } GameData;
 
+typedef struct{
+    int nb_text, total_text;
+    Vector** text_zone;
+    int width, height;
+    char** frame;
+} Screen;
+
 
 typedef struct {
 	GameData data;
 	char name[20];
 } Save;
+
 
 	// Vector
 
@@ -88,6 +96,8 @@ char getTile (Map map, Vector position);
 
 int maxMonkeys (Map map);
 
+void frameAddPath(Screen screen, Vector shift, Map map);
+
 	// Crabs
 
 int move (Crab *crab, Map map);
@@ -108,6 +118,8 @@ int allDead (Crab *crabs, int nb_crab);
 
 int checkKing (Crab *crabs, int n_crabs, int path_length);
 
+void frameAddCrabs(Screen screen, Vector shift, Map map, Crab* crabs, int n_monkeys);
+
 	// Monkeys
 
 int shoot (Monkey monkey, Crab *crabs, int n_crab, Map map);  	//à changer pour que ça renvoie un bool indiquant si le crabe est tué
@@ -118,29 +130,31 @@ void upMonkey (Monkey *monkey);
 
 Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys); 
 
+void frameAddMonkeys(Screen *screen, Vector shift, Monkey* monkeys, int n_monkeys);
 
 	// Game
 
-void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned); // Displays the map, health and bananas of the player
+void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned, Screen screen); // Displays the map, health and bananas of the player
 
-int gameRound (GameData *data); // Returns 1 if player won the round, 0 if the player lost
+int gameRound (GameData *data, Screen screen); // Returns 1 if player won the round, 0 if the player lost
 
-int manage (GameData *data); // Phase of placing new monkeys and upgrading them
+int manage (GameData *data, Screen *screen); // Phase of placing new monkeys and upgrading them
 
 int game (GameData data); 
 
-void placeMonkey (GameData *data);
+void placeMonkey (GameData *data, Screen *screen);
 
 int score (GameData data, int alive); // Gives the player a score based on the final state of the game
 
 
-        // Save
+    // Save
 
 int saveGame (GameData data);
 
 Save* getSaves ();
 
 Save load (int n);
+
 
 
 	// Other
