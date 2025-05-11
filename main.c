@@ -4,71 +4,99 @@
 #include "monkey.h"
 #include "random.h"
 #include "player_interaction.h"
-
-
-
+#include "save.h"
 
 
 void mainMenu () {
 	
 	
+	printf("\nBienvenue à Coconut PartY!");
 	
-	
-	char *options[2] = {
+	char *options[3] = {
 			    "Démarrer",
+				"Continuer",
 			    "Quitter"
 			    };
-	int option = choice(options, 2);
+	
+	int data_ready = 0;
 	GameData data;
-	system("clear");
-	switch (option) {
+	while (!data_ready) {
 		
-		case 0 :
-		    
-			printf("\nParamètres de la partie : ");
+		int option = choice(options, 3);
+		switch (option) {
 			
-			printf("\nHauteur de l'île : ");
-			int height = askInt(0, MAP_SIZE_Y_MAX);
+			case 0 :
+				printf("\nParamètres de la partie : ");
+				
+				printf("\nHauteur de l'île : ");
+				int height = askInt(0, MAP_SIZE_Y_MAX);
+				
+				printf("\nLargeur de l'île : ");
+				int width = askInt(0, MAP_SIZE_X_MAX);
+				
+				unsigned long seed;
+				printf("\nSouhaitez-vous entrer une seed ?");
+				if (!binaryChoice()) {
+					printf("\nSeed : ");
+					scanf("%d", &seed);
+				} else {
+					seed = time(NULL);
+					printf("\nSeed : %d", seed);
+				}
+				
+				printf("\nEntrez le nombre de PV : ");
+				data.health = askInt(1, 10);
+				
+				data.map = mapInit(width, height, DIR_RIGHT, seed);
+				data.max_monkeys = maxMonkeys(data.map);
+				data.monkeys = malloc(sizeof(Monkey) * data.max_monkeys);
+				data.n_monkeys = 0;
+				data.bananas = 10;
+				data.rounds = roundNumber(data.map);
+				data.round_number = 0;
+
+				data_ready = 1;
+
+				break;
 			
-			printf("\nLargeur de l'île : ");
-			int width = askInt(0, MAP_SIZE_X_MAX);
+			case 1 :
+				; // this line is important don't remove
+				Save *saves = getSaves();
+
+				char *options[4];
+				for (int i = 0; i < 3; i++) {
+					options[i] = saves[i].name;
+				}
+				options[3] = "Annuler";
+
+				int n;
+				printf("\nChoisissez la sauvegarde à charger : ");
+				do {
+					n = choice(options, 4);
+				} while (strlen(options[n]) == 4 && options[n][0] == 'V');
+
+				if (n != 3) {
+					data = saves[n].data;
+					data_ready = 1;
+				}
+				
+				break;
 			
-			unsigned long seed;
-			printf("\nSouhaitez-vous entrer une seed ?");
-			if (!binaryChoice()) {
-				printf("\nSeed : ");
-				scanf("%ld", &seed);
-			} else {
-				seed = time(NULL);
-				printf("\nSeed : %ld", seed);
-			}
-			printf("\nEntrez le nombre de PV : ");
-			data.health = askInt(1, 10);
-			
-            
-			
-			data.map = mapInit(width, height, DIR_RIGHT, seed);
-			data.max_monkeys = maxMonkeys(data.map);
-			data.monkeys = malloc(sizeof(Monkey) * data.max_monkeys);
-			data.n_monkeys = 0;
-			data.bananas = 10;
-			data.rounds = roundNumber(data.map);
-			data.round_number = 0;
-			break;
-		
-		case 1 :
-			printf("\nAu revoir!");
-			exit(0);
+			case 2 :
+				printf("\nAu revoir!");
+				exit(0);
+		}
 	}
-	system("clear");
+
 	int score = game(data);
 	if (score) {
-		printf("\nVous avez eu un score de %d!", score);
+		printf("\nVous avez eu un score de %d!\n", score);
+		sleep(1);
 	}
 }
 
 int main () {
-	printf("\nBienvenue à Coconut PartY!");
+	
 	while(1) {
 		mainMenu();
 	}

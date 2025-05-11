@@ -1,9 +1,7 @@
 #ifndef SAVE_H
 #define SAVE_H
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include "header.h"
 
 
 int EmptyFile(const char *nameFile) {    //If the character size in a file is empty, return 1
@@ -174,49 +172,39 @@ Save* getSaves(){  //takes the data from the 3 saves in an array, passing from t
     Save *tab = malloc(3 * sizeof(Save));
     FILE *file1 = fopen("save1.bin", "rb");
     if(file1 == NULL){
-        perror("Erreur d'ouverture du fichier.");
-    }
-    int read1 = fread(tab, sizeof(Save), 1, file1);
-    if(read1 != 0 && read1 != 1){
-        perror("Erreur de lecture dans le fichier.");
-    }
-    if(strlen(tab[0].name) == 0){  //if the save name has not yet been assigned, write "EMPTY" instead
-        strcpy(tab->name, "(VIDE)");
+        strcpy(tab->name, "Vide");
+    } 
+    else {
+        int read1 = fread(tab, sizeof(Save), 1, file1);
+        if(read1 != 0 && read1 != 1){
+            perror("Erreur de lecture dans le fichier.");
+        }
     }
     fclose(file1);
-
     FILE *file2 = fopen("save2.bin", "rb");
     if(file2 == NULL){
-        perror("Erreur d'ouverture du fichier.");
-    }
-    int read2 = fread(tab + 1, sizeof(Save), 1, file2);
-    if(read2 != 0 && read2 != 1){
-        perror("Erreur de lecture dans le fichier.");
-    }
-    if(strlen(tab[1].name) == 0){
-        strcpy((tab + 1)->name, "(VIDE)");
+        strcpy((tab + 1)->name, "Vide");
+    } 
+    else {
+        int read2 = fread(tab + 1, sizeof(Save), 1, file2);
+        if(read2 != 0 && read2 != 1){
+            perror("Erreur de lecture dans le fichier.");
+        }
     }
     fclose(file2);
-
     FILE *file3 = fopen("save3.bin", "rb");
     if(file3 == NULL){
-        perror("Erreur d'ouverture du fichier.");
+        strcpy((tab + 2)->name, "Vide");
+    } 
+    else {
+        int read3 = fread(tab + 2, sizeof(Save), 1, file3);
+        if(read3 != 0 && read3 != 1){
+            perror("Erreur de lecture dans le fichier.");
+        }
     }
-    int read3 = fread(tab + 2, sizeof(Save), 1, file3);
-    if(read3 != 0 && read3 != 1){
-        perror("Erreur de lecture dans le fichier.");
-    }
-    if(strlen(tab[2].name) == 0){
-        strcpy((tab + 2)->name, "(VIDE)");
-    }
-    fclose(file3);
+    fclose(file1);
     return tab;
 }
 
-Save load(int n){ //choose which save you want to recover on save 1, 2 or 3
-    Save save;
-    save = getSaves()[n - 1];
-    return save;
-}
 
 #endif

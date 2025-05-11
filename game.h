@@ -4,8 +4,8 @@
 
 #include "header.h"
 #include "map.h"
+#include "save.h"
 
-#include "screen.h"
 
 #define START_CRABS 2
 #define CRAB_MULTIPLIER 1.2
@@ -14,7 +14,7 @@
 #define MONKEY_PRICE 25
 #define MONKEY_UPGRADE_PRICE 15
 
-int gameRound (GameData *data, Screen screen) {
+int gameRound (GameData *data) {
 	/* Runs a single round/wave of crabs, returns 1 if player won and 0 if they lost */
 	
 	// Create crabs
@@ -29,9 +29,9 @@ int gameRound (GameData *data, Screen screen) {
 	int crabs_spawned = 0;
 	while (alive && !allDead(crabs, n_crabs)) {
 		
-		displayGame(*data, crabs, n_crabs, crabs_spawned, screen);
 		sleep(1);
-
+		displayGame(*data, crabs, n_crabs, crabs_spawned);
+		
 		// Shoot crabs
 		for (Monkey *monkey = data->monkeys; monkey < data->monkeys + data->n_monkeys; monkey++) {
 			bananas_gained = shoot(*monkey, crabs, n_crabs, data->map);
@@ -62,7 +62,7 @@ int gameRound (GameData *data, Screen screen) {
 			alive = 0;
 		}
 	}
-	displayGame(*data, crabs, n_crabs, crabs_spawned, screen);
+	
 	// End of round
 	free(crabs);
 	
@@ -71,21 +71,13 @@ int gameRound (GameData *data, Screen screen) {
 
 
 
-void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned, Screen screen) {
-    system("clear");
-    frameAddNumber(crabs_spawned, screen, MAP_SIZE_X_MAX-11,1);
-    frameAddNumber(n_crabs, screen, MAP_SIZE_X_MAX-8,1);
-    
-    frameAddNumber(data.health, screen, MAP_SIZE_X_MAX+2,2);
-    frameAddNumber(data.bananas, screen, MAP_SIZE_X_MAX+2,5);
-    
-	frameAddCrabs(screen, vector(1,3), data.map, crabs, n_crabs);
-	display2(screen);
-    frameAddPath(screen, vector(1,3), data.map);
+void displayGame (GameData data, Crab *crabs, int n_crabs, int crabs_spawned) {
+	printf("\nManche %d/%d : %d/%d Crabes\nVie : %d    Bananes : %d\n", data.round_number, data.rounds, crabs_spawned, n_crabs, data.health, data.bananas);
+	display(data.map, crabs, n_crabs, data.monkeys, data.n_monkeys);
 }
 
 
-void placeMonkey (GameData *data, Screen *screen) {
+void placeMonkey (GameData *data) {
 	/*  */
 	Vector position;
 	char tile;
@@ -95,10 +87,9 @@ void placeMonkey (GameData *data, Screen *screen) {
 	} while (tile == 'w' || tile == 'p');
 	data->monkeys[data->n_monkeys] = newMonkey(position);
 	data->n_monkeys++;
-	frameAddMonkeys(screen, vector(1,3), data->monkeys, data->n_monkeys);
 }
 
-int manage (GameData *data, Screen *screen) {
+int manage (GameData *data) {
 	/* Returns 1 if player quits */
 	int quit = 0;
 	int option;
@@ -106,7 +97,7 @@ int manage (GameData *data, Screen *screen) {
 	char *options[4] =  {"Acheter",
 			     "Améliorer",
 			     "Passer",
-			     "Quitter"
+			     "Sauvegarder et quitter"
 			     };
 	
 	while (!quit) {
@@ -122,7 +113,8 @@ int manage (GameData *data, Screen *screen) {
 					printf("\nVous avez atteint le maximum de singes.");
 				} else {
 					data->bananas -= MONKEY_PRICE;
-					placeMonkey(data, screen);
+					printf("\nEntrez la position où placer le singe : ");
+					placeMonkey(data);
 				}
 				break;
 			
@@ -130,6 +122,7 @@ int manage (GameData *data, Screen *screen) {
 				if (data->bananas >= MONKEY_UPGRADE_PRICE) {
 					data->bananas -= MONKEY_UPGRADE_PRICE;
 					Monkey *monkey;
+					printf("\nEntrez la position du singe à améliorer : ");
 					do {
 						monkey = monkeyAt(subtract(askPosition(MAP_SIZE_X_MAX, MAP_SIZE_Y_MAX), vector(1, 1)), data->monkeys, data->n_monkeys);
 					} while (monkey == NULL);
@@ -144,6 +137,7 @@ int manage (GameData *data, Screen *screen) {
 				break;
 			
 			case 3 :
+				saveGame(*data);
 				return 1;
 		}
 	}
@@ -154,47 +148,22 @@ int game (GameData data) {
 	/* Returns 0 if the player quit */
 	int alive = 1;
 	int quit = 0;
-    
-    Screen screen = initScreen(MAP_SIZE_X_MAX+10, MAP_SIZE_Y_MAX+2, 2);
-    
-    
-    frameAddTextZone(&screen, MAP_SIZE_X_MAX+2,1 , MAP_SIZE_X_MAX+10,MAP_SIZE_Y_MAX+2);
-    frameAddColumnChar('|', screen, MAP_SIZE_X_MAX+1);
-    frameAddTabChar("Vie :", 5, screen, MAP_SIZE_X_MAX+2,1);
-    frameAddNumber(data.health, screen, MAP_SIZE_X_MAX+2,2);
-    frameAddTabChar("Bananes :", 9, screen, MAP_SIZE_X_MAX+2,4);
-    frameAddNumber(data.bananas, screen, MAP_SIZE_X_MAX+2,5);
-    
-    frameAddTextZone(&screen, 1,1 , MAP_SIZE_X_MAX,1);
-    frameAddLigneChar('-', screen, 2);
-    frameAddPath(screen, vector(1,3), data.map);
-    frameAddTabChar("Manche n°  /  &", 15, screen, 1,1);
-    frameAddNumber(data.round_number, screen, 11,1);
-    frameAddNumber(data.rounds, screen, 14,1);
-    frameAddTabChar("&00/00 crabes", 13, screen, MAP_SIZE_X_MAX-12,1);
-    
-    frameAddTabTabChar(data.map.map, MAP_SIZE_X_MAX, MAP_SIZE_Y_MAX, screen, 1, 3);
-    
-    display2(screen);
 
-    
-	//display(data.map, NULL, 0, NULL, 0);
+	display(data.map, NULL, 0, NULL, 0);
 	printf("\nPlacez votre premier singe : ");
-	placeMonkey(&data, &screen);
+	placeMonkey(&data);
 
 	while (data.round_number < data.rounds && alive && !quit) {
 		
 		data.round_number++;
-		frameAddNumber(data.round_number, screen, 11,1);
-        frameAddNumber(data.rounds, screen, 14,1);
-    
-		quit = manage(&data, &screen);
+		printf("\nManche %d/%d !", data.round_number, data.rounds);
+		
+		quit = manage(&data);
 		if (!quit) {
-			alive = gameRound(&data, screen);
+			alive = gameRound(&data);
 		}
 	}
 	
-	freeScreen(&screen);
 	if (alive) {
 		return score(data, alive);
 	} else {

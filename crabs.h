@@ -10,7 +10,6 @@
 #include "header.h"
 #include "random.h"
 #include "vector.h"
-#include "screen.h"
 
 #define SIZE 4
 
@@ -46,7 +45,7 @@ int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	for(int i = 0; i < length_tab_crab; i++){
 		if(tab_crabs[i].path_index == BEFORE_SPAWN_INDEX){
 			tab_crabs[i].path_index = 0;
-            return i < length_tab_crab;
+            return i + 1 < length_tab_crab;
 		}
 	}
 	return 0;
@@ -110,18 +109,6 @@ int checkKing (Crab *crabs, int n_crabs, int path_length) {
 	return 0;
 }
 
-void frameAddCrabs(Screen screen, Vector shift, Map map, Crab* crabs, int n_crabs){
-    Vector p;
-    if(crabs != NULL){
-    	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
-    		if (crab->path_index >= 0) {
-				p = map.path[crab->path_index];
-    			screen.frame[p.y + shift.y][p.x + shift.x] = 'c';
-    		}
-    	}
-	}
-    
-}
 
 int bananaDrop (Crab crab) {
     return 3 + 2 * crab.speed;

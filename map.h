@@ -22,7 +22,107 @@
 #define DIR_RIGHT vector(-1, 0)
 
 //fonctionne
-
+void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys) {
+    
+	/* Displays the current state of the game */
+	
+	char **screen = malloc(sizeof(char*) * MAP_SIZE_Y_MAX);
+	testAlloc(screen, "display(), screen");
+	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
+		screen[y] = malloc(sizeof(char) * MAP_SIZE_X_MAX);
+		testAlloc(screen[y], "display(), screen[y]");
+	}
+	
+	
+	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
+		for (int x = 0; x < MAP_SIZE_X_MAX; x++) {
+			screen[y][x] = map.map[y][x];
+		}
+	}
+	
+	
+	Vector p;
+	for (int i = 0; i < map.path_length; i++) {
+		p = map.path[i];
+		screen[p.y][p.x] = 'p';
+	}
+	
+	if(crabs != NULL){
+    	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
+    		if (crab->path_index >= 0) {
+				p = map.path[crab->path_index];
+    			screen[p.y][p.x] = 'c';
+    		}
+    	}
+	}
+	
+	if(monkeys != NULL){
+    	for (Monkey *monkey = monkeys; monkey < monkeys + n_monkeys; monkey++) {
+    		p = monkey->position;
+    		screen[p.y][p.x] = 'm';
+    	}
+    }
+	
+	
+	printf("\n  ");
+	for (int i = 0; i < MAP_SIZE_X_MAX; i++) {
+		if (i + 1 < 10) {
+			printf("%d ", i + 1);
+		} else {
+			printf("%d", i + 1);
+		}
+	}
+	printf("\n");
+	for(int y = 0; y<MAP_SIZE_Y_MAX; y++) {
+		if (y + 1 < 10) {
+			printf("%d ", y + 1);
+		} else {
+			printf("%d", y + 1);
+		}
+		for(int x = 0; x<MAP_SIZE_X_MAX; x++) {
+			if(screen[y][x] == 'w') {
+                		printf("\033[44m");
+                		printf("  ");
+				//printf("\U0001f30a ");
+			}
+			if(screen[y][x] == 'T') {
+				printf("\033[42m");
+				printf("  ");
+				//printf("\U0001f333 ");
+			}
+			if(screen[y][x] == 't') {
+				printf("\e[48;2;2;131;6m");
+				printf("  ");
+				//printf("\U0001f333 ");
+			}
+			if(screen[y][x] == 'c') {
+				printf("\e[48;2;200;0;0m");
+				printf("  ");
+				//printf("\U0001f333 ");
+			}
+			if(screen[y][x] == 'm') {
+				printf("\e[48;2;34;50;50m");
+				printf("  ");
+				//printf("\U0001f333 ");
+			}
+			if(screen[y][x] == 's') {
+				printf("\e[48;2;223;198;65m");
+				printf("  ");
+			}
+			if(screen[y][x] == 'p') {
+				printf("\e[48;2;23;4;220m");
+				printf("  ");
+			}
+			printf("\033[0m");
+		}
+		printf("\n");
+	}
+	
+	for (int y = 0; y < MAP_SIZE_Y_MAX; y++) {
+		free(screen[y]);
+	}
+	free(screen);
+}
 
 //fonctionne
 void mapMakeIsland (Map* map){
@@ -422,16 +522,16 @@ void mapMakePath(Map* map){
 	//rebrouse chemin pour placer les casses du chemin
 	placePath(digital_map, map, end);
     
-    for (int y=0; y<MAP_SIZE_Y_MAX; y++){
+    /*for (int y=0; y<MAP_SIZE_Y_MAX; y++){
     	free(digital_map[y]);
     	digital_map[y] = NULL;
 	}
 	free(digital_map);
-	digital_map = NULL;
-    free(removable_tree);
-    removable_tree= NULL;
-    /*free(to_visit);
-    to_visit = NULL;*/
+	digital_map = NULL;*/
+    //free(removable_tree);
+    //removable_tree= NULL;
+    //free(to_visit);
+    //to_visit = NULL;
 
 }
 
@@ -534,19 +634,6 @@ char getTile (Map map, Vector position) {
     testComparison(0 <= position.x && position.x < MAP_SIZE_X_MAX, "getTile(), position.x");
     testComparison(0 <= position.y && position.y < MAP_SIZE_Y_MAX, "getTile(), position.y");
 	return map.map[position.y][position.x];
-}
-
-
-
-
-void frameAddPath(Screen screen, Vector shift, Map map){
-    Vector p;
-	for (int i = 0; i < map.path_length-1; i++) {
-		p = map.path[i];
-		screen.frame[p.y + shift.y][p.x + shift.x] = 'p';
-	}
-	p = map.path[map.path_length-1];
-	screen.frame[p.y + shift.y][p.x + shift.x] = 'k';
 }
 
 #endif
