@@ -1,4 +1,4 @@
-#ifdef SAVE_H
+#ifndef SAVE_H
 #define SAVE_H
 
 #include<stdio.h>
