@@ -28,7 +28,7 @@ int crabTimer () {
 
 void kill (Crab *crab){
 	crab->path_index = DEATH_INDEX;
-}  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
+}  // if the crab dies, it goes to address -1 on the path to remove it from the map
 
 int move (Crab *crab, Map map){
 	if(crab->health > 0){
@@ -39,7 +39,7 @@ int move (Crab *crab, Map map){
 			}
 	}
 	return 0;
-} //Si le crabe est en vie, et qu'il n'a pas atteint la fin du chemin, il avance de n cases selon sa vitesse. S'il atteint la fin de la map, il meurt et fait perdre 1 point de vie au joueur.
+} //If the crab is alive and has not reached the end of the path, it moves forward n squares according to its speed. If it reaches the end of the map, it dies, causing the player to lose 1 life point
 
 int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	for(int i = 0; i < length_tab_crab; i++){
@@ -49,7 +49,7 @@ int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 		}
 	}
 	return 0;
-} //Pour le premier crabe du tableau des crabes qui a un indice de chemin égale à -2, on le place  sur le terrain. S'il y en a plus, la fonction retourne 0.
+} //The first crab in the table of crabs that has a path index equal to -2 is placed in the field. If there are more, the function returns 0
 
 Crab randomCrab (int round_number){
     if (round_number <= 0){
@@ -68,7 +68,7 @@ Crab randomCrab (int round_number){
     }
     
     return crab;
-}//En fonction du nombre de tour joué, crée un crab de caracteristique variable
+}//Depending on the number of rounds played, creates a crab with variable characteristics
 
 Crab *randomCrabs (int n, int round_number){
     Crab* crabs = NULL;
@@ -81,7 +81,7 @@ Crab *randomCrabs (int n, int round_number){
         crabs[i] = randomCrab(round_number);
     }
     return crabs;
-}//Crée n crabs aléatoirement, en fonction du tour actuel, dans une liste renvoyé
+}//Creates n crabs randomly, depending on the current round, in a list returned
 
 int isDead (Crab crab){
     return crab.path_index == DEATH_INDEX;
@@ -94,7 +94,7 @@ int allDead (Crab *crabs, int nb_crab){
         }
     }
     return 1;
-}//return 1 si tout les crabes n'ont plus de vie, 0 si il en reste au moins 1
+}//return 1 if all the crabs are dead, 0 if at least 1 remains
 
 
 int checkKing (Crab *crabs, int n_crabs, int path_length) {
