@@ -17,8 +17,8 @@
 
 
 
-#define MAP_SIZE_X_MAX 30    //la taille maximum ne doit pas etre en dessous de 10
-#define MAP_SIZE_Y_MAX 20    //la taille maximum ne doit pas etre en dessous de 10
+#define MAP_SIZE_X_MAX 40    //la taille maximum ne doit pas etre en dessous de 10
+#define MAP_SIZE_Y_MAX 30    //la taille maximum ne doit pas etre en dessous de 10
 #define DIR_RIGHT vector(-1, 0)
 
 //fonctionne
@@ -49,10 +49,13 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 	
 	if(crabs != NULL){
     	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
-    		if (crab->path_index >= 0) {
-				p = map.path[crab->path_index];
-    			screen[p.y][p.x] = 'c';
+    	
+    		if (crab->path_index < 0) {
+    			continue;
     		}
+    		
+    		p = map.path[crab->path_index];
+    		screen[p.y][p.x] = 'c';
     	}
 	}
 	
@@ -66,18 +69,18 @@ void display (Map map, Crab *crabs, int n_crabs, Monkey *monkeys, int n_monkeys)
 	
 	printf("\n  ");
 	for (int i = 0; i < MAP_SIZE_X_MAX; i++) {
-		if (i + 1 < 10) {
-			printf("%d ", i + 1);
+		if (i < 10) {
+			printf("%d ", i);
 		} else {
-			printf("%d", i + 1);
+			printf("%d", i);
 		}
 	}
 	printf("\n");
 	for(int y = 0; y<MAP_SIZE_Y_MAX; y++) {
-		if (y + 1 < 10) {
-			printf("%d ", y + 1);
+		if (y < 10) {
+			printf("%d ", y);
 		} else {
-			printf("%d", y + 1);
+			printf("%d", y);
 		}
 		for(int x = 0; x<MAP_SIZE_X_MAX; x++) {
 			if(screen[y][x] == 'w') {
