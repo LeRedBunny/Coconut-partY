@@ -29,10 +29,10 @@ void mainMenu () {
 				printf("\nParamètres de la partie : ");
 				
 				printf("\nHauteur de l'île : ");
-				int height = askInt(0, MAP_SIZE_Y_MAX);
+				int height = askInt(10, MAP_SIZE_Y_MAX);
 				
 				printf("\nLargeur de l'île : ");
-				int width = askInt(0, MAP_SIZE_X_MAX);
+				int width = askInt(10, MAP_SIZE_X_MAX);
 				
 				unsigned long seed;
 				printf("\nSouhaitez-vous entrer une seed ?");
