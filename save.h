@@ -84,7 +84,6 @@ int saveGame(GameData data){
             perror("Erreur d'écriture dans le fichier.");
         }
         fclose(file);
-        printf("Votre sauvegarde a eu lieu dans l'emplacement 1.\n");
         return 1;
     }
 
@@ -102,7 +101,6 @@ int saveGame(GameData data){
             perror("Erreur d'écriture dans le fichier.");
         }
         fclose(file);
-        printf("Votre sauvegarde a eu lieu dans l'emplacement 2.\n");
         return 1;
     }
 
@@ -120,14 +118,13 @@ int saveGame(GameData data){
             perror("Erreur d'écriture dans le fichier.");
         }
         fclose(file);
-        printf("Votre sauvegarde a eu lieu dans l'emplacement 3.\n");
         return 1;
     }
 
     else{  //if all saves are used, ask the user to choose between give up or overwriting on a save
         printf("Toutes les sauvegardes sont actuellement utilisées, voulez-vous ECRASER une sauvegarde ou ABANDONNER ?");
         do {
-            scanf("%s", &choices);
+            scanf("%s", choices);
             if(strcmp(choices, "Abandonner") == 0 || strcmp(choices, "abandonner") == 0 || strcmp(choices, "ABANDONNER") == 0){
             exit(1);
             }   
@@ -169,7 +166,7 @@ int saveGame(GameData data){
                 }
             }
             printf("Je n'ai pas compris, voulez-vous abandonner ou écraser ?"); //loop as he doesn't tap give up or overwriting
-        }while(strcmp(choices, "Abandonner") != 0 || strcmp(choices, "abandonner") != 0 || strcmp(choices, "ABANDONNER") != 0 || strcmp(choices, "ECRASER") != 0 || strcmp(choices, "Ecraser") != 0 || strcmp(choices, "écraser") != 0 || strcmp(choices, "ecraser") != 0);
+        }while(strcmp(choices, "Abandonner") != 0 && strcmp(choices, "abandonner") != 0 && strcmp(choices, "ABANDONNER") != 0 && strcmp(choices, "ECRASER") != 0 && strcmp(choices, "Ecraser") != 0 && strcmp(choices, "écraser") != 0 && strcmp(choices, "ecraser") != 0);
     }
 }
 
@@ -180,11 +177,11 @@ Save* getSaves(){  //takes the data from the 3 saves in an array, passing from t
         perror("Erreur d'ouverture du fichier.");
     }
     int read1 = fread(tab, sizeof(Save), 1, file1);
-    if(read1 == 0){
-        printf("La sauvegarde 1 est vide.\n");
-    }
-    else if(read1 != 1){
+    if(read1 != 0 && read1 != 1){
         perror("Erreur de lecture dans le fichier.");
+    }
+    if(strlen(tab[0].name) == 0){
+        strcpy(tab->name, "(VIDE)");
     }
     fclose(file1);
 
@@ -193,11 +190,11 @@ Save* getSaves(){  //takes the data from the 3 saves in an array, passing from t
         perror("Erreur d'ouverture du fichier.");
     }
     int read2 = fread(tab + 1, sizeof(Save), 1, file2);
-    if(read2 == 0){
-        printf("La sauvegarde 2 est vide.\n");
-    }
-    else if(read2 != 1){
+    if(read2 != 0 && read2 != 1){
         perror("Erreur de lecture dans le fichier.");
+    }
+    if(strlen(tab[1].name) == 0){
+        strcpy((tab + 1)->name, "(VIDE)");
     }
     fclose(file2);
 
@@ -206,11 +203,11 @@ Save* getSaves(){  //takes the data from the 3 saves in an array, passing from t
         perror("Erreur d'ouverture du fichier.");
     }
     int read3 = fread(tab + 2, sizeof(Save), 1, file3);
-    if(read3 == 0){
-        printf("La sauvegarde 3 est vide.\n");
-    }
-    else if(read3 != 1){
+    if(read3 != 0 && read3 != 1){
         perror("Erreur de lecture dans le fichier.");
+    }
+    if(strlen(tab[2].name) == 0){
+        strcpy((tab + 2)->name, "(VIDE)");
     }
     fclose(file3);
     return tab;
