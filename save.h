@@ -168,7 +168,7 @@ int saveGame(GameData data){
                     return 1;
                 }
             }
-            printf("Je n'ai pas compris, voulez-vous abandonner ou écraser ?"); //loop as he doesn't tap give up or overwriting
+            printf("Je n'ai pas compris, voulez-vous abandonner ou écraser ?"); //loop as he doesn't tap "give up" or "overwriting"
         }while(strcmp(choix, "Abandonner") != 0 || strcmp(choix, "abandonner") != 0 || strcmp(choix, "ABANDONNER") != 0 || strcmp(choix, "ECRASER") != 0 || strcmp(choix, "Ecraser") != 0 || strcmp(choix, "écraser") != 0 || strcmp(choix, "ecraser") != 0);
     }
 }
