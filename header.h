@@ -46,6 +46,12 @@ typedef struct {
 	int bananas;
 } GameData;
 
+
+typedef struct {
+	GameData data;
+	char name[20];
+} Save;
+
 	// Vector
 
 Vector vector (int x, int y);
@@ -126,6 +132,15 @@ int game (GameData data);
 void placeMonkey (GameData *data);
 
 int score (GameData data, int alive); // Gives the player a score based on the final state of the game
+
+
+        // Save
+
+int saveGame (GameData data);
+
+Save* getSaves ();
+
+Save load (int n);
 
 
 	// Other
