@@ -70,15 +70,15 @@ int saveGame(GameData data){
     Save save;
     save.data = data;
     verif_et_crea();
-    do{
-        printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
-        scanf("%s", save.name);
-    }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
     if(fichierEstVide("save1.bin")){
         FILE *fichier = fopen("save1.bin", "wb");
         if(fichier == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
+        do{
+            printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
+            scanf("%s", save.name);
+        }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
         int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
         if(ecrits != 1){
             perror("Erreur d'écriture dans le fichier.");
@@ -93,6 +93,10 @@ int saveGame(GameData data){
         if(fichier == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
+        do{
+            printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
+            scanf("%s", save.name);
+        }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
         int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
         if(ecrits != 1){
             perror("Erreur d'écriture dans le fichier.");
@@ -107,6 +111,10 @@ int saveGame(GameData data){
         if(fichier == NULL){
             perror("Erreur d'ouverture du fichier.");
         }
+        do{
+            printf("Comment voulez-vous appelez votre sauvegarde ? (20 caractères max)\n");
+            scanf("%s", save.name);
+        }while(strlen(save.name) <= 0 || strlen(save.name) > 20);
         int ecrits = fwrite(&save, sizeof(Save), 1, fichier);
         if(ecrits != 1){
             perror("Erreur d'écriture dans le fichier.");
@@ -118,8 +126,8 @@ int saveGame(GameData data){
 
     else{
         printf("Toutes les sauvegardes sont actuellement utilisées, voulez-vous ECRASER une sauvegarde ou ABANDONNER ?");
-        scanf("%s", &choix);
         do {
+            scanf("%s", &choix);
             if(strcmp(choix, "Abandonner") == 0 || strcmp(choix, "abandonner") == 0 || strcmp(choix, "ABANDONNER") == 0){
             exit(1);
             }   
