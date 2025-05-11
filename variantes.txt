@@ -1,3 +1,0 @@
-Direction : DIR_RIGHT
-Dimensions : DIM_USER
-Fin : END_USER_MULTI
