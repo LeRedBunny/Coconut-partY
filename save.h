@@ -180,7 +180,7 @@ Save* getSaves(){  //takes the data from the 3 saves in an array, passing from t
     if(read1 != 0 && read1 != 1){
         perror("Erreur de lecture dans le fichier.");
     }
-    if(strlen(tab[0].name) == 0){
+    if(strlen(tab[0].name) == 0){  //if the save name has not yet been assigned, write "EMPTY" instead
         strcpy(tab->name, "(VIDE)");
     }
     fclose(file1);
