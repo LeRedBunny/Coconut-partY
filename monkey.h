@@ -6,7 +6,7 @@
 #include "header.h"
 #include "map.h"
 #include "vector.h"
-
+#include "screen.h"
 
 
 
@@ -69,6 +69,16 @@ Monkey *monkeyAt (Vector position, Monkey *monkeys, int n_monkeys) {
 		}
 	}
 	return NULL;
+}
+
+
+void frameAddMonkeys(Screen *screen, Vector shift, Monkey* monkeys, int n_monkeys){
+    Vector p;
+    if(monkeys != NULL){
+		p = monkeys[n_monkeys-1].position;
+		screen->frame[p.y + shift.y][p.x + shift.x] = 'm';
+    }
+    
 }
 
 #endif

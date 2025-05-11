@@ -7,10 +7,12 @@
 
 
 
+
+
 void mainMenu () {
 	
 	
-	printf("\nBienvenue à Coconut PartY!");
+	
 	
 	char *options[2] = {
 			    "Démarrer",
@@ -18,9 +20,11 @@ void mainMenu () {
 			    };
 	int option = choice(options, 2);
 	GameData data;
+	system("clear");
 	switch (option) {
 		
 		case 0 :
+		    
 			printf("\nParamètres de la partie : ");
 			
 			printf("\nHauteur de l'île : ");
@@ -33,14 +37,15 @@ void mainMenu () {
 			printf("\nSouhaitez-vous entrer une seed ?");
 			if (!binaryChoice()) {
 				printf("\nSeed : ");
-				scanf("%d", &seed);
+				scanf("%ld", &seed);
 			} else {
 				seed = time(NULL);
-				printf("\nSeed : %d", seed);
+				printf("\nSeed : %ld", seed);
 			}
-			
 			printf("\nEntrez le nombre de PV : ");
 			data.health = askInt(1, 10);
+			
+            
 			
 			data.map = mapInit(width, height, DIR_RIGHT, seed);
 			data.max_monkeys = maxMonkeys(data.map);
@@ -55,7 +60,7 @@ void mainMenu () {
 			printf("\nAu revoir!");
 			exit(0);
 	}
-	
+	system("clear");
 	int score = game(data);
 	if (score) {
 		printf("\nVous avez eu un score de %d!", score);
@@ -63,7 +68,7 @@ void mainMenu () {
 }
 
 int main () {
-	
+	printf("\nBienvenue à Coconut PartY!");
 	while(1) {
 		mainMenu();
 	}

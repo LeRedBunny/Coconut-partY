@@ -10,6 +10,7 @@
 #include "header.h"
 #include "random.h"
 #include "vector.h"
+#include "screen.h"
 
 #define SIZE 4
 
@@ -28,7 +29,7 @@ int crabTimer () {
 
 void kill (Crab *crab){
 	crab->path_index = DEATH_INDEX;
-}  // if the crab dies, it goes to address -1 on the path to remove it from the map
+}  // si le crabe meurt, il va à l'adresse -1 du chemin pour le sortir de la map.
 
 int move (Crab *crab, Map map){
 	if(crab->health > 0){
@@ -39,7 +40,7 @@ int move (Crab *crab, Map map){
 			}
 	}
 	return 0;
-} //If the crab is alive and has not reached the end of the path, it moves forward n squares according to its speed. If it reaches the end of the map, it dies, causing the player to lose 1 life point
+} //Si le crabe est en vie, et qu'il n'a pas atteint la fin du chemin, il avance de n cases selon sa vitesse. S'il atteint la fin de la map, il meurt et fait perdre 1 point de vie au joueur.
 
 int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 	for(int i = 0; i < length_tab_crab; i++){
@@ -49,7 +50,7 @@ int spawnCrab(Crab *tab_crabs, int length_tab_crab){
 		}
 	}
 	return 0;
-} //The first crab in the table of crabs that has a path index equal to -2 is placed in the field. If there are more, the function returns 0
+} //Pour le premier crabe du tableau des crabes qui a un indice de chemin égale à -2, on le place  sur le terrain. S'il y en a plus, la fonction retourne 0.
 
 Crab randomCrab (int round_number){
     if (round_number <= 0){
@@ -68,7 +69,7 @@ Crab randomCrab (int round_number){
     }
     
     return crab;
-}//Depending on the number of rounds played, creates a crab with variable characteristics
+}//En fonction du nombre de tour joué, crée un crab de caracteristique variable
 
 Crab *randomCrabs (int n, int round_number){
     Crab* crabs = NULL;
@@ -81,7 +82,7 @@ Crab *randomCrabs (int n, int round_number){
         crabs[i] = randomCrab(round_number);
     }
     return crabs;
-}//Creates n crabs randomly, depending on the current round, in a list returned
+}//Crée n crabs aléatoirement, en fonction du tour actuel, dans une liste renvoyé
 
 int isDead (Crab crab){
     return crab.path_index == DEATH_INDEX;
@@ -94,7 +95,7 @@ int allDead (Crab *crabs, int nb_crab){
         }
     }
     return 1;
-}//return 1 if all the crabs are dead, 0 if at least 1 remains
+}//return 1 si tout les crabes n'ont plus de vie, 0 si il en reste au moins 1
 
 
 int checkKing (Crab *crabs, int n_crabs, int path_length) {
@@ -109,6 +110,18 @@ int checkKing (Crab *crabs, int n_crabs, int path_length) {
 	return 0;
 }
 
+void frameAddCrabs(Screen screen, Vector shift, Map map, Crab* crabs, int n_crabs){
+    Vector p;
+    if(crabs != NULL){
+    	for (Crab *crab = crabs; crab < crabs + n_crabs; crab++) {
+    		if (crab->path_index >= 0) {
+				p = map.path[crab->path_index];
+    			screen.frame[p.y + shift.y][p.x + shift.x] = 'c';
+    		}
+    	}
+	}
+    
+}
 
 int bananaDrop (Crab crab) {
     return 3 + 2 * crab.speed;
